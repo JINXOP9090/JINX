@@ -1,0 +1,2943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Best Ypt Group</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#0a0a0f;--white:#f0f0f5;--off:#14141f;--gray:#2a2a3a;--mid:#6b6b80;
+  --border:rgba(255,255,255,0.06);--green:#2ecc71;--orange:#f39c12;--red:#e74c3c;
+  --accent:#6c5ce7;--accent-glow:rgba(108,92,231,0.25);
+  --font:'DM Sans',sans-serif;--serif:'DM Serif Display',serif;
+  --card:#14141f;--card-border:rgba(255,255,255,0.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:var(--font);background:#050508;color:var(--white);display:flex;justify-content:center}
+.app-shell{width:100%;max-width:430px;min-height:100vh;background:var(--black);position:relative;overflow-x:hidden;display:flex;flex-direction:column}
+
+/* SCREENS */
+.screen{display:none;flex:1;flex-direction:column;overflow-y:auto;padding-bottom:20px}
+.screen.active{display:flex}
+#loginScreen{padding-bottom:0}
+
+/* SPLASH */
+#splashScreen{
+  position:fixed;inset:0;z-index:40;background:var(--black);
+  display:flex;flex-direction:column;padding:48px 28px 40px;
+  transition:opacity .4s,transform .4s;max-width:430px;margin:0 auto;
+}
+#splashScreen.hide{opacity:0;transform:translateY(-16px);pointer-events:none}
+.sp-brand{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--mid)}
+.sp-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding:32px 0}
+.sp-eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--mid);margin-bottom:14px}
+.sp-headline{font-family:var(--serif);font-size:48px;line-height:1.08;color:var(--black);margin-bottom:12px}
+.sp-sub{font-size:15px;color:var(--mid);line-height:1.65}
+.sp-visual{width:100%;height:160px;background:var(--off);border-radius:20px;margin-top:28px;display:flex;align-items:center;justify-content:center}
+.sp-visual-text{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--mid)}
+.sp-cta{background:var(--accent);color:#fff;border:none;border-radius:16px;padding:18px;font-family:var(--font);font-size:15px;font-weight:500;width:100%;cursor:pointer;letter-spacing:.3px;transition:opacity .15s;box-shadow:0 4px 18px var(--accent-glow)}
+.sp-cta:active{opacity:.8}
+
+/* LOGIN */
+.login-wrap{display:flex;flex-direction:column;min-height:100vh;padding:48px 28px 36px}
+.login-brand{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--mid);margin-bottom:auto}
+.login-hero{margin:40px 0 40px}
+.login-eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--mid);margin-bottom:12px}
+.login-headline{font-family:var(--serif);font-size:40px;line-height:1.1;margin-bottom:8px}
+.login-sub{font-size:14px;color:var(--mid);line-height:1.6}
+.login-form{display:flex;flex-direction:column;gap:12px}
+.field-label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:5px;display:block}
+.text-input{width:100%;border:1.5px solid var(--gray);border-radius:14px;padding:14px 16px;font-family:var(--font);font-size:15px;color:var(--black);background:var(--white);outline:none;transition:border-color .2s}
+.text-input:focus{border-color:var(--black)}
+.input-hint{font-size:11px;color:var(--mid);margin-top:4px}
+.btn-primary{background:var(--accent);color:#fff;border:none;border-radius:14px;padding:16px;font-family:var(--font);font-size:15px;font-weight:500;cursor:pointer;transition:opacity .15s;width:100%;letter-spacing:.2px;box-shadow:0 4px 12px var(--accent-glow)}
+.btn-primary:active{opacity:.8}
+.btn-google{background:var(--off);color:var(--white);border:1.5px solid var(--gray);border-radius:14px;padding:15px;font-family:var(--font);font-size:15px;cursor:pointer;transition:all .15s;width:100%;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn-google:active{background:var(--gray)}
+.btn-google:hover{border-color:var(--accent)}
+.g-icon{width:18px;height:18px;flex-shrink:0}
+.divider{display:flex;align-items:center;gap:12px;color:var(--mid);font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--gray)}
+.login-err{font-size:13px;color:var(--red);text-align:center;min-height:16px}
+.login-footer{margin-top:auto;padding-top:24px;font-size:12px;color:var(--mid);text-align:center;line-height:1.7}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 12px;position:sticky;top:0;background:rgba(10,10,15,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:10;border-bottom:1px solid var(--border)}
+.topbar-title{font-size:20px;font-weight:500;flex:1}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.topbar-left{display:flex;align-items:center;gap:12px;margin-right:10px}
+.hamburger{width:32px;height:32px;display:flex;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;flex-shrink:0;padding:2px}
+.hamburger span{display:block;height:2px;background:var(--white);border-radius:1px;transition:all .25s}
+.avatar{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),#a855f7);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:600;flex-shrink:0;cursor:pointer;user-select:none;box-shadow:0 0 12px var(--accent-glow)}
+.badge-pill{font-size:10px;letter-spacing:1px;background:var(--off);border:1px solid var(--gray);border-radius:8px;padding:4px 10px;color:var(--accent)}
+
+/* SIDEBAR */
+.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0);z-index:30;pointer-events:none;transition:background .3s}
+.sidebar-overlay.open{background:rgba(0,0,0,.55);pointer-events:all}
+.sidebar{position:fixed;top:0;left:0;height:100%;width:260px;max-width:80vw;background:var(--off);z-index:31;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;border-right:1px solid var(--card-border);overflow-y:auto}
+.sidebar.open{transform:translateX(0)}
+.sidebar-head{padding:48px 20px 16px;border-bottom:1px solid var(--border)}
+.sidebar-user{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+.sidebar-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#a855f7);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:600;flex-shrink:0;overflow:hidden;box-shadow:0 0 12px var(--accent-glow)}
+.sidebar-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.sidebar-name{font-size:14px;font-weight:500;color:var(--white)}
+.sidebar-email{font-size:11px;color:var(--mid);margin-top:1px}
+.sidebar-nav{flex:1;padding:8px 0}
+.sidebar-item{display:flex;align-items:center;gap:12px;padding:13px 20px;cursor:pointer;transition:background .15s;color:var(--mid);font-size:14px;font-weight:500;border-left:3px solid transparent;user-select:none}
+.sidebar-item:active{background:var(--gray)}
+.sidebar-item.active{color:var(--white);border-left-color:var(--accent);background:rgba(108,92,231,0.08)}
+.sidebar-item-icon{width:18px;height:18px;flex-shrink:0;opacity:.6}
+.sidebar-item.active .sidebar-item-icon{opacity:1}
+.sidebar-section-lbl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);padding:12px 20px 4px;opacity:.6}
+.sidebar-divider{height:1px;background:var(--border);margin:4px 0}
+.sidebar-admin-item{color:var(--red) !important;opacity:.85}
+.sidebar-admin-item .sidebar-item-icon{opacity:.7}
+.sidebar-footer{padding:16px 20px 28px;border-top:1px solid var(--border)}
+.sidebar-logout{width:100%;background:transparent;border:1.5px solid var(--gray);border-radius:10px;padding:11px;font-family:var(--font);font-size:13px;color:var(--mid);cursor:pointer;transition:all .15s}
+.sidebar-logout:active{background:var(--gray)}
+
+/* BOTTOM NAV */
+/* bottom nav removed — navigation via sidebar only */
+
+/* SECTION HEAD */
+.section-head{padding:20px 20px 0}
+.section-title{font-family:var(--serif);font-size:26px;margin-bottom:2px}
+.section-sub{font-size:12px;color:var(--mid);margin-bottom:18px}
+
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px;margin-bottom:14px}
+.stat-card{background:var(--off);border-radius:16px;padding:14px;border:1px solid var(--card-border)}
+.stat-card.dark{background:var(--accent);color:#fff}
+.stat-lbl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:6px}
+.stat-card.dark .stat-lbl{color:rgba(255,255,255,.5)}
+.stat-num{font-family:var(--serif);font-size:28px;line-height:1}
+.stat-note{font-size:11px;color:var(--mid);margin-top:3px}
+.stat-card.dark .stat-note{color:rgba(255,255,255,.45)}
+
+/* PROGRESS */
+.prog-wrap{padding:0 20px;margin-bottom:14px}
+.prog-card{background:var(--off);border-radius:18px;padding:16px 18px;border:1px solid var(--card-border)}
+.prog-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.prog-title{font-size:13px;font-weight:500}
+.prog-pct{font-family:var(--serif);font-size:20px;color:var(--accent)}
+.prog-bar-bg{height:5px;background:var(--gray);border-radius:3px;overflow:hidden}
+.prog-bar-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .8s ease}
+.prog-sub{font-size:11px;color:var(--mid);margin-top:6px}
+
+/* LIST */
+.list-section{padding:0 20px}
+.list-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.list-header-lbl{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid)}
+.list-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.list-item:last-child{border-bottom:none}
+.list-item:active{opacity:.7}
+.list-rank{font-family:var(--serif);font-size:15px;width:22px;text-align:center;flex-shrink:0;color:var(--mid)}
+.list-rank.top{color:var(--accent)}
+.list-avatar{width:36px;height:36px;border-radius:50%;background:var(--off);border:1.5px solid var(--card-border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--mid);flex-shrink:0;overflow:hidden}
+.list-avatar.me{background:var(--accent);color:#fff;border-color:var(--accent)}
+.list-avatar img,.avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.profile-avatar-lg img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.list-info{flex:1;min-width:0}
+.list-name{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list-sub{font-size:11px;color:var(--mid);margin-top:1px}
+.list-bar-bg{height:3px;background:var(--gray);border-radius:2px;margin-top:5px;overflow:hidden}
+.list-bar{height:100%;border-radius:2px;background:var(--accent)}
+.list-bar.done{background:var(--green)}
+.list-bar.mid{background:var(--orange)}
+.list-bar.low{background:var(--red)}
+.list-right{text-align:right;flex-shrink:0}
+.list-val{font-family:var(--serif);font-size:15px}
+.list-val-sub{font-size:11px;color:var(--mid);margin-top:1px}
+
+/* SEARCH */
+.search-row{display:flex;gap:8px;padding:0 20px;margin-bottom:14px}
+.search-input{flex:1;border:1.5px solid var(--gray);border-radius:12px;padding:10px 14px;font-family:var(--font);font-size:13px;color:var(--white);background:var(--off);outline:none}
+.search-input:focus{border-color:var(--accent);background:var(--black)}
+.sort-btn{border:1.5px solid var(--gray);border-radius:12px;padding:10px 14px;font-family:var(--font);font-size:12px;color:var(--mid);background:var(--off);cursor:pointer;white-space:nowrap}
+
+/* PROFILE */
+.profile-hero{display:flex;align-items:center;gap:14px;padding:20px 20px 16px}
+.profile-avatar-lg{width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#a855f7);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:600;flex-shrink:0;overflow:hidden;box-shadow:0 0 20px var(--accent-glow)}
+.profile-name{font-family:var(--serif);font-size:24px}
+.profile-real{font-size:13px;color:var(--mid);margin-top:2px}
+.profile-crew{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--mid);margin-top:4px}
+.p-stats{display:flex;gap:10px;padding:0 20px;margin-bottom:16px}
+.p-stat{flex:1;background:var(--off);border-radius:14px;padding:12px;text-align:center;border:1px solid var(--card-border)}
+.p-stat-val{font-family:var(--serif);font-size:22px}
+.p-stat-lbl{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--mid);margin-top:2px}
+
+/* LOG CARD */
+.log-card{margin:0 20px 14px;background:var(--accent);border-radius:18px;padding:20px;color:#fff}
+.log-card-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:16px}
+.log-stepper{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.log-btn{width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);background:transparent;color:var(--white);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1}
+.log-btn:active{background:rgba(255,255,255,.1)}
+.log-hrs{flex:1;font-family:var(--serif);font-size:40px;text-align:center}
+.log-unit{font-size:10px;color:rgba(255,255,255,.35);text-align:center;margin-bottom:14px;letter-spacing:2px;text-transform:uppercase}
+.log-note-input{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:11px 13px;font-family:var(--font);font-size:13px;color:var(--white);outline:none;margin-bottom:14px}
+.log-note-input::placeholder{color:rgba(255,255,255,.2)}
+.log-submit{width:100%;background:#fff;color:var(--black);border:none;border-radius:12px;padding:14px;font-family:var(--font);font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s}
+.log-submit:active{opacity:.8}
+
+/* EDIT CARD */
+.edit-card{margin:0 20px 14px;border:1.5px solid var(--gray);border-radius:18px;padding:18px;background:var(--off)}
+.edit-card-lbl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:14px}
+.edit-field{margin-bottom:12px}
+.edit-field-lbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--mid);margin-bottom:5px}
+.edit-input{width:100%;border:1.5px solid var(--gray);border-radius:10px;padding:11px 13px;font-family:var(--font);font-size:14px;color:var(--white);background:var(--black);outline:none;transition:border-color .2s}
+.edit-input:focus{border-color:var(--accent)}
+.btn-logout{width:100%;background:var(--off);color:var(--mid);border:1.5px solid var(--gray);border-radius:12px;padding:13px;font-family:var(--font);font-size:14px;cursor:pointer;margin-top:8px}
+
+/* CREWS */
+.crew-list{padding:0 20px;display:flex;flex-direction:column;gap:12px}
+.crew-card{border-radius:18px;border:1.5px solid var(--card-border);overflow:hidden;background:var(--off)}
+.crew-card.rank-1{border-color:rgba(180,140,60,.5)}
+.crew-top{display:flex;align-items:center;gap:12px;padding:14px 16px}
+.crew-rank{font-family:var(--serif);font-size:20px;width:24px;flex-shrink:0;color:var(--mid)}
+.crew-rank.gold{color:#ffd700}
+.crew-icon-box{width:36px;height:36px;border-radius:50%;background:var(--black);border:1.5px solid var(--card-border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--mid);flex-shrink:0}
+.crew-info{flex:1;min-width:0}
+.crew-name{font-size:15px;font-weight:500}
+.crew-meta{font-size:11px;color:var(--mid);margin-top:2px}
+.crew-score{text-align:right;flex-shrink:0}
+.crew-num{font-family:var(--serif);font-size:20px}
+.crew-num-lbl{font-size:10px;color:var(--mid)}
+.crew-bar-wrap{height:4px;background:var(--gray);margin:0 16px}
+.crew-bar-fill{height:100%;transition:width .8s}
+.crew-members-wrap{display:flex;flex-wrap:wrap;gap:6px;padding:10px 16px 14px}
+.member-chip{background:var(--off);border-radius:20px;padding:4px 10px;font-size:12px;display:flex;align-items:center;gap:5px}
+.chip-pct{font-size:10px;color:var(--mid)}
+
+/* WEEK TABS */
+.week-tabs{display:flex;gap:6px;overflow-x:auto;padding:12px 20px;margin-bottom:4px;scrollbar-width:none;align-items:center;flex-shrink:0;-webkit-overflow-scrolling:touch}
+.week-tabs::-webkit-scrollbar{display:none}
+.wtab{border:1.5px solid var(--gray);border-radius:20px;padding:7px 16px;font-size:12px;font-weight:500;color:var(--mid);background:var(--off);white-space:nowrap;cursor:pointer;flex-shrink:0;transition:all .15s;line-height:1.4;display:inline-block}
+.wtab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.wtab.locked{opacity:.4;cursor:default}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;align-items:flex-end;justify-content:center}
+.modal-overlay.on{display:flex}
+.modal-sheet{background:var(--off);border-radius:24px 24px 0 0;width:100%;max-width:430px;padding:24px 20px 40px;max-height:88vh;overflow-y:auto;border:1px solid var(--card-border)}
+.modal-handle{width:36px;height:4px;background:var(--gray);border-radius:2px;margin:0 auto 20px}
+.modal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.modal-title{font-family:var(--serif);font-size:22px}
+.modal-close{background:none;border:none;font-size:20px;color:var(--mid);cursor:pointer;line-height:1;padding:0;font-family:inherit}
+
+/* TOAST */
+.toast{position:fixed;bottom:94px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--accent);color:#fff;font-size:13px;padding:11px 20px;border-radius:20px;opacity:0;transition:all .3s;pointer-events:none;z-index:100;white-space:nowrap;max-width:88%;overflow:hidden;text-overflow:ellipsis;box-shadow:0 4px 16px var(--accent-glow)}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* LOADING */
+.load-bar{position:fixed;top:0;left:0;width:100%;height:3px;z-index:200}
+.load-fill{height:100%;width:0%;background:var(--accent);border-radius:0 2px 2px 0;transition:width .4s,opacity .3s}
+
+/* CHIP */
+.chip{display:inline-block;background:var(--off);border:1px solid var(--gray);border-radius:8px;padding:4px 10px;font-size:11px;color:var(--mid)}
+
+/* FRUIT CARD */
+.fruit-card{border:1.5px solid var(--gray);border-radius:18px;padding:16px 18px;background:var(--off);cursor:pointer;transition:border-color .15s,background .15s}
+.fruit-card:active{background:var(--black)}
+.fruit-card.equipped{border-color:var(--accent);background:rgba(108,92,231,0.08)}
+.fruit-card.equipped .fc-name{font-weight:600}
+.fruit-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.fc-left{display:flex;align-items:center;gap:10px}
+.fc-initials{width:36px;height:36px;border-radius:50%;background:var(--black);border:1.5px solid var(--gray);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--mid);flex-shrink:0;letter-spacing:-.5px}
+.fruit-card.equipped .fc-initials{background:var(--accent);color:#fff;border-color:var(--accent)}
+.fc-name{font-size:14px;font-weight:500;color:var(--white)}
+.fc-type{font-size:10px;color:var(--mid);margin-top:1px;letter-spacing:.5px}
+.fc-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.fc-when{font-size:10px;letter-spacing:1px;text-transform:uppercase;background:var(--gray);border-radius:6px;padding:3px 8px;color:var(--mid)}
+.fc-when.per-log{background:rgba(46,204,113,0.15);color:#2ecc71}
+.fc-when.week-end{background:rgba(243,156,18,0.15);color:#f39c12}
+.fc-equipped-badge{font-size:10px;letter-spacing:1px;text-transform:uppercase;background:var(--accent);color:#fff;border-radius:6px;padding:3px 8px}
+.fc-effect{font-size:12px;color:var(--mid);line-height:1.55}
+.fc-holder{font-size:11px;color:var(--mid);margin-top:6px;padding-top:6px;border-top:1px solid var(--border)}
+
+/* NOT LINKED */
+.not-linked-msg{background:var(--off);border-radius:14px;padding:14px 16px;margin:0 20px 14px;font-size:13px;color:var(--mid);border:1.5px solid var(--gray);line-height:1.6}
+
+/* FRUIT PICKER */
+.fruit-pick-item{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-radius:14px;border:1.5px solid var(--gray);background:var(--black);cursor:pointer;transition:border-color .15s,background .15s;-webkit-tap-highlight-color:transparent}
+.fruit-pick-item.selected{border-color:var(--accent);background:rgba(108,92,231,0.08)}
+.fruit-pick-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--gray);flex-shrink:0;margin-top:2px;transition:border-color .15s,background .15s;display:flex;align-items:center;justify-content:center}
+.fruit-pick-item.selected .fruit-pick-radio{border-color:var(--accent);background:var(--accent)}
+.fruit-pick-radio-dot{width:6px;height:6px;border-radius:50%;background:#fff;opacity:0;transition:opacity .15s}
+.fruit-pick-item.selected .fruit-pick-radio-dot{opacity:1}
+.fruit-pick-info{}
+.fruit-pick-name{font-size:13px;font-weight:500;color:var(--white);margin-bottom:2px}
+.fruit-pick-effect{font-size:11px;color:var(--mid);line-height:1.5}
+
+/* EMPTY */
+.empty{text-align:center;padding:48px 24px}
+.empty-title{font-size:14px;color:var(--mid)}
+
+/* TIMER SCREEN */
+.timer-hero{display:flex;flex-direction:column;align-items:center;padding:20px 20px 16px}
+.timer-ring-wrap{position:relative;width:210px;height:210px;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.timer-ring-svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.timer-ring-track{fill:none;stroke:var(--gray);stroke-width:3}
+.timer-ring-fill{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;stroke-dasharray:691;stroke-dashoffset:691;transition:stroke-dashoffset .6s ease, stroke .4s}
+.timer-ring-fill.running{stroke:var(--accent)}
+.timer-ring-fill.paused{stroke:var(--mid)}
+.timer-center{display:flex;flex-direction:column;align-items:center;z-index:1}
+.timer-display{font-family:var(--serif);font-size:50px;line-height:1;letter-spacing:-1px;color:var(--white);font-variant-numeric:tabular-nums;margin-bottom:4px}
+.timer-display.running{color:var(--white)}
+.timer-display.paused{color:var(--mid)}
+.timer-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--mid)}
+.timer-controls{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
+.timer-start-btn{width:72px;height:72px;border-radius:50%;background:var(--accent);color:#fff;border:none;font-family:var(--font);font-size:14px;font-weight:500;cursor:pointer;transition:transform .12s,box-shadow .2s;box-shadow:0 0 0 10px rgba(108,92,231,0.12),0 6px 24px var(--accent-glow)}
+.timer-start-btn:active{transform:scale(.92)}
+.timer-ctrl-bar{display:flex;align-items:center;background:var(--off);border:1px solid var(--card-border);border-radius:22px;overflow:hidden;width:calc(100% - 40px);max-width:300px}
+.timer-ctrl-item{flex:1;display:flex;align-items:center;justify-content:center;height:50px;cursor:pointer;border:none;background:transparent;font-family:var(--font);font-size:13px;font-weight:500;color:var(--mid);transition:background .15s,color .15s;position:relative}
+.timer-ctrl-item:active{background:var(--gray)}
+.timer-ctrl-item.center{color:var(--white);background:var(--gray);border-radius:18px;margin:4px;flex:1.4}
+.timer-ctrl-item.center.paused{color:var(--accent)}
+.timer-ctrl-item.danger{color:var(--red)}
+.timer-ctrl-divider{width:1px;height:24px;background:var(--border);flex-shrink:0}
+.timer-btn-main{display:none}
+.timer-btn-sec{display:none}
+/* Manual log card */
+.timer-manual-card{margin:0 20px 14px;background:var(--off);border-radius:18px;padding:16px 18px;border:1px solid var(--card-border)}
+.timer-manual-lbl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:12px}
+.timer-manual-row{display:flex;align-items:center;gap:10px}
+.timer-manual-stepper{display:flex;align-items:center;gap:8px;flex:1}
+.timer-manual-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--gray);background:var(--black);color:var(--white);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
+.timer-manual-btn:active{background:var(--gray)}
+.timer-manual-val{flex:1;font-family:var(--serif);font-size:28px;text-align:center;color:var(--white)}
+.timer-manual-unit{font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;text-align:center;margin-bottom:10px}
+.timer-manual-submit{width:100%;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:13px;font-family:var(--font);font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s;box-shadow:0 4px 12px var(--accent-glow)}
+.timer-manual-submit:active{opacity:.8}
+.timer-sessions{padding:0 20px}
+.session-item{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+.session-item:last-child{border-bottom:none}
+.session-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;margin-right:10px}
+.session-info{flex:1}
+.session-dur{font-size:14px;font-weight:500}
+.session-time{font-size:11px;color:var(--mid);margin-top:1px}
+.session-log-btn{font-size:12px;font-weight:500;color:#fff;background:var(--accent);border:none;border-radius:10px;padding:6px 14px;cursor:pointer}
+.session-log-btn:active{background:var(--gray)}
+.timer-total-bar{margin:0 20px 16px;background:var(--off);border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border:1px solid var(--card-border)}
+.timer-total-lbl{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid)}
+.timer-total-val{font-family:var(--serif);font-size:22px}
+
+/* CHAT SCREEN */
+#chatScreen{overflow:hidden !important;padding-bottom:0 !important}
+.chat-wrap{display:flex;flex-direction:column;flex:1;min-height:0}
+.chat-messages{flex:1;overflow-y:auto;padding:12px 16px 12px;display:flex;flex-direction:column;gap:8px;min-height:0}
+.chat-msg{max-width:78%;padding:10px 14px;border-radius:18px;font-size:14px;line-height:1.5;word-break:break-word}
+.chat-msg.mine{background:var(--accent);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.chat-msg.theirs{background:var(--off);color:var(--white);align-self:flex-start;border-bottom-left-radius:4px;border:1px solid var(--card-border)}
+.chat-msg-sender{font-size:10px;letter-spacing:.5px;margin-bottom:3px;opacity:.55}
+.chat-msg.mine .chat-msg-sender{text-align:right;color:rgba(255,255,255,.6)}
+.chat-msg.theirs .chat-msg-sender{color:var(--mid)}
+.chat-msg-time{font-size:10px;margin-top:3px;opacity:.45;text-align:right}
+.chat-input-wrap{display:flex;align-items:center;gap:8px;padding:10px 16px;border-top:1px solid var(--border);background:rgba(10,10,15,0.97);flex-shrink:0;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+.chat-input{flex:1;border:1.5px solid var(--gray);border-radius:22px;padding:10px 16px;font-family:var(--font);font-size:14px;color:var(--white);background:var(--off);outline:none;transition:border-color .2s;resize:none;max-height:100px;line-height:1.4}
+.chat-input:focus{border-color:var(--accent);background:var(--black)}
+.chat-send-btn{width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .15s;box-shadow:0 4px 12px var(--accent-glow)}
+.chat-send-btn:active{opacity:.8}
+.chat-send-btn svg{width:16px;height:16px}
+.chat-date-sep{text-align:center;font-size:11px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin:4px 0;flex-shrink:0}
+.chat-empty{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;padding:60px 0;pointer-events:none}
+.chat-empty-title{font-size:14px;color:var(--mid)}
+.chat-empty-sub{font-size:12px;color:var(--mid);opacity:.7}
+
+/* GMAIL-ONLY GATE */
+.gmail-gate{background:var(--off);border:1.5px solid var(--gray);border-radius:14px;padding:16px;margin:0 0 14px;text-align:center}
+.gmail-gate-title{font-size:14px;font-weight:500;margin-bottom:4px}
+.gmail-gate-sub{font-size:12px;color:var(--mid);line-height:1.55}
+
+/* CREATE PLAYER SECTION */
+.create-player-card{margin:0 20px 14px;border:1.5px solid var(--gray);border-radius:18px;padding:18px;background:var(--off)}
+.create-player-lbl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:14px}
+.crew-select{width:100%;border:1.5px solid var(--gray);border-radius:10px;padding:11px 13px;font-family:var(--font);font-size:14px;color:var(--white);outline:none;background:var(--black);appearance:none;transition:border-color .2s}
+.crew-select:focus{border-color:var(--accent)}
+/* HABITS */
+/* Header summary row */
+.habits-summary{background:var(--off);border-radius:20px;padding:18px 20px;margin:8px 20px 16px;border:1px solid var(--card-border)}
+.habits-summary-title{font-family:var(--serif);font-size:22px;margin-bottom:2px}
+.habits-summary-sub{font-size:12px;color:var(--mid);margin-bottom:14px}
+.habits-summary-stats{display:flex;gap:24px}
+.habits-stat-val{font-family:var(--serif);font-size:26px;font-weight:600}
+.habits-stat-lbl{font-size:11px;color:var(--mid);margin-top:1px}
+/* Card layout */
+.habit-card{background:var(--off);border-radius:20px;padding:16px;border:1px solid var(--card-border);display:flex;gap:14px;align-items:flex-start;overflow:hidden}
+.habit-card-mini-grid{flex-shrink:0;display:grid;grid-template-columns:repeat(7,10px);gap:3px;width:auto}
+.hcg-cell{width:10px;height:10px;border-radius:2px;background:var(--gray)}
+.habit-card-right{flex:1;min-width:0;overflow:hidden;display:flex;flex-direction:column}
+.habit-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.habit-card-name{font-size:15px;font-weight:600;color:var(--white)}
+.habit-card-menu{background:none;border:none;color:var(--mid);cursor:pointer;padding:2px 6px;font-size:18px;line-height:1;flex-shrink:0}
+/* Square day tiles */
+.habit-day-chips{display:flex;gap:5px;margin:10px 0 12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px}
+.habit-day-chips::-webkit-scrollbar{display:none}
+.habit-chip{width:34px;height:40px;min-width:34px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9px;font-weight:700;flex-shrink:0;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:transform .1s}
+.habit-chip:active{transform:scale(.88)}
+.habit-chip .chip-day{font-size:9px;font-weight:700;letter-spacing:.3px}
+.habit-chip .chip-dot{width:5px;height:5px;border-radius:50%;opacity:0}
+.habit-chip.int1 .chip-dot,.habit-chip.int2 .chip-dot,.habit-chip.int3 .chip-dot{opacity:1;background:#fff}
+.habit-chip.empty{background:var(--gray);color:var(--mid)}
+.habit-chip.empty .chip-dot{display:none}
+.habit-chip.int1{color:#fff}
+.habit-chip.int2{color:#fff}
+.habit-chip.int3{color:#fff}
+.habit-chip.today-ring{outline:2px solid rgba(255,255,255,.7);outline-offset:1px}
+/* Intensity selector popup */
+.intensity-bar{display:flex;gap:6px;margin-bottom:10px}
+.int-btn{flex:1;padding:9px 0;border:none;border-radius:10px;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s,transform .1s;color:#fff}
+.int-btn:active{transform:scale(.95)}
+/* Check-in button */
+.habit-checkin-btn{width:100%;border:none;border-radius:14px;padding:11px;font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .15s;color:#fff}
+.habit-checkin-btn:active{opacity:.8}
+.habit-checkin-btn.checked{background:var(--gray) !important;color:var(--mid)}
+/* Add button */
+.habit-add-btn{width:100%;background:transparent;border:1.5px dashed var(--gray);border-radius:16px;padding:15px;color:var(--mid);font-family:var(--font);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:border-color .2s,color .2s;margin-top:4px}
+.habit-add-btn:active{background:var(--off)}
+.habit-add-btn svg{flex-shrink:0}
+/* Intensity popup overlay */
+.int-popup-overlay{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.45)}
+.int-popup{background:var(--off);border-radius:24px 24px 0 0;width:100%;max-width:430px;padding:20px 20px 36px;border:1px solid var(--card-border)}
+.int-popup-title{font-size:13px;font-weight:500;color:var(--mid);margin-bottom:14px;text-align:center;letter-spacing:.3px}
+.int-levels{display:flex;gap:8px;margin-bottom:8px}
+.int-level-btn{flex:1;padding:16px 8px;border:1.5px solid var(--gray);border-radius:16px;background:var(--black);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:border-color .15s,background .15s;font-family:var(--font)}
+.int-level-btn:active{background:var(--gray)}
+.int-level-btn.selected{border-color:var(--accent);background:rgba(108,92,231,0.1)}
+.int-level-dots{display:flex;gap:3px}
+.int-level-dot{width:7px;height:7px;border-radius:2px}
+.int-level-label{font-size:12px;font-weight:600;color:var(--white)}
+.int-level-sub{font-size:10px;color:var(--mid)}
+.int-confirm-btn{width:100%;padding:14px;border:none;border-radius:14px;background:var(--accent);color:#fff;font-family:var(--font);font-size:15px;font-weight:600;cursor:pointer;margin-top:10px;transition:opacity .15s}
+.int-confirm-btn:active{opacity:.8}
+.int-cancel-btn{width:100%;padding:12px;border:none;border-radius:14px;background:transparent;color:var(--mid);font-family:var(--font);font-size:14px;cursor:pointer;margin-top:4px}
+.habit-freq-btn{padding:7px 14px;border-radius:20px;border:1.5px solid var(--gray);background:transparent;color:var(--mid);font-family:var(--font);font-size:12px;cursor:pointer;transition:all .15s}
+.habit-freq-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.habit-color-dot{width:28px;height:28px;border-radius:50%;cursor:pointer;transition:transform .1s;border:3px solid transparent}
+.habit-color-dot.active{border-color:var(--white);transform:scale(1.15)}
+/* Detail screen */
+.habit-month-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px}
+.hmc-day-lbl{font-size:9px;color:var(--mid);text-align:center;padding-bottom:4px;font-weight:600;letter-spacing:.5px}
+.hmc-cell{aspect-ratio:1;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;cursor:default;position:relative}
+.hmc-cell.empty-slot{background:transparent}
+.hmc-cell.no-data{background:var(--gray);color:var(--mid)}
+.hmc-cell.logged{color:#fff}
+.hmc-cell.today-cal{outline:2px solid rgba(255,255,255,.6);outline-offset:1px}
+.hmc-cell.future{background:rgba(255,255,255,0.03);color:rgba(255,255,255,.15)}
+.habit-barchart{display:flex;align-items:flex-end;gap:6px;height:80px}
+.hbc-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%}
+.hbc-bar-bg{flex:1;width:100%;background:var(--gray);border-radius:4px;overflow:hidden;display:flex;align-items:flex-end}
+.hbc-bar-fill{width:100%;border-radius:4px;transition:height .6s ease;min-height:0}
+.hbc-lbl{font-size:9px;color:var(--mid);white-space:nowrap}
+/* ADMIN SCREEN */
+.admin-section{margin:0 20px 14px}
+.admin-section-lbl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:10px;padding-top:4px}
+.admin-card{background:var(--off);border-radius:16px;padding:16px 18px;border:1.5px solid var(--card-border);margin-bottom:10px}
+.admin-row{display:flex;gap:8px;align-items:center}
+.admin-input{flex:1;border:1.5px solid var(--gray);border-radius:10px;padding:10px 13px;font-family:var(--font);font-size:13px;color:var(--white);background:var(--black);outline:none;transition:border-color .2s}
+.admin-input:focus{border-color:var(--accent)}
+.admin-btn{height:40px;padding:0 16px;border-radius:10px;background:var(--accent);color:#fff;border:none;font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;transition:opacity .15s}
+.admin-btn:active{opacity:.8}
+.admin-btn.danger{background:var(--red)}
+.admin-btn.warn{background:var(--orange)}
+.admin-select{flex:1;border:1.5px solid var(--gray);border-radius:10px;padding:10px 13px;font-family:var(--font);font-size:13px;color:var(--white);background:var(--black);outline:none;appearance:none;transition:border-color .2s}
+.admin-select:focus{border-color:var(--accent)}
+.admin-list{display:flex;flex-direction:column;gap:8px}
+.admin-pirate-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--black);border-radius:12px;border:1px solid var(--card-border)}
+.admin-pirate-name{flex:1;font-size:13px;font-weight:500}
+.admin-pirate-meta{font-size:11px;color:var(--mid);margin-top:1px}
+.admin-actions{display:flex;gap:6px;flex-shrink:0}
+.admin-icon-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--gray);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:background .15s}
+.admin-icon-btn.kick{border-color:rgba(243,156,18,.4);color:var(--orange)}
+.admin-icon-btn.kick:active{background:rgba(243,156,18,.15)}
+.admin-icon-btn.ban{border-color:rgba(231,76,60,.4);color:var(--red)}
+.admin-icon-btn.ban:active{background:rgba(231,76,60,.15)}
+</style>
+</head>
+<body>
+
+<div class="load-bar"><div class="load-fill" id="loadFill"></div></div>
+
+<!-- SPLASH -->
+<div id="splashScreen">
+  <div class="sp-brand">made by JINX with love</div>
+  <div class="sp-body">
+    <div class="sp-eyebrow">Grand Line Tournament</div>
+    <div class="sp-headline">Best Ypt<br>Group</div>
+    <div class="sp-sub">Track study hours, earn berries,<br>and conquer islands together.</div>
+    <div class="sp-visual"><div class="sp-visual-text">Grand Line</div></div>
+  </div>
+  <button class="sp-cta" id="splashBtn">Set Sail</button>
+</div>
+
+<!-- APP -->
+<div class="app-shell">
+
+  <!-- SIDEBAR OVERLAY -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-head">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar" id="sidebarAvatar">?</div>
+        <div>
+          <div class="sidebar-name" id="sidebarName">—</div>
+          <div class="sidebar-email" id="sidebarEmail">—</div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="sidebar-section-lbl">Navigation</div>
+      <div class="sidebar-item active" id="snav-home" onclick="sidebarGoTo('home')">
+        <svg class="sidebar-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </div>
+      <div class="sidebar-item" id="snav-members" onclick="sidebarGoTo('members')">
+        <svg class="sidebar-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Members
+      </div>
+      <div class="sidebar-item" id="snav-timer" onclick="sidebarGoTo('timer')">
+        <svg class="sidebar-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Timer
+      </div>
+      <div class="sidebar-item" id="snav-chat" onclick="sidebarGoTo('chat')">
+        <svg class="sidebar-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chat
+      </div>
+      <div class="sidebar-item" id="snav-habits" onclick="sidebarGoTo('habits')">
+        <svg class="sidebar-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Habits
+      </div>
+      <div class="sidebar-item" id="snav-crews" onclick="sidebarGoTo('crews')">
+        <svg class="sidebar-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Crews
+      </div>
+      <div class="sidebar-item" id="snav-profile" onclick="sidebarGoTo('profile')">
+        <svg class="sidebar-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Me
+      </div>
+      <!-- Admin only -->
+      <div id="sidebarAdminSection" style="display:none">
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-section-lbl">Admin</div>
+        <div class="sidebar-item sidebar-admin-item" onclick="sidebarGoTo('admin')">
+          <svg class="sidebar-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Admin Panel
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <button class="sidebar-logout" onclick="closeSidebar();doLogout()">Log out</button>
+    </div>
+  </div>
+
+  <!-- PUBLIC MEMBER PROFILE SCREEN -->
+  <div id="memberProfileScreen" class="screen">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="hamburger" onclick="memberProfileGoBack()" style="gap:0;flex-direction:row;align-items:center;width:auto;padding:0">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </div>
+      </div>
+      <div class="topbar-title" id="mpTitle">Profile</div>
+      <div style="width:34px"></div>
+    </div>
+    <!-- Hero -->
+    <div style="display:flex;align-items:center;gap:16px;padding:20px 20px 12px">
+      <div id="mpAvatar" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#a855f7);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;font-weight:600;flex-shrink:0;overflow:hidden;box-shadow:0 0 20px var(--accent-glow)"></div>
+      <div style="min-width:0">
+        <div id="mpName" style="font-family:var(--serif);font-size:22px;margin-bottom:2px">—</div>
+        <div id="mpSub" style="font-size:12px;color:var(--mid)">—</div>
+      </div>
+    </div>
+    <!-- Stats row -->
+    <div class="p-stats">
+      <div class="p-stat"><div class="p-stat-val" id="mpBerries">—</div><div class="p-stat-lbl">Berries</div></div>
+      <div class="p-stat"><div class="p-stat-val" id="mpGoal">—</div><div class="p-stat-lbl">Goal</div></div>
+      <div class="p-stat"><div class="p-stat-val" id="mpStreak">—</div><div class="p-stat-lbl">Streak</div></div>
+    </div>
+    <!-- Progress bar -->
+    <div class="prog-wrap">
+      <div class="prog-card">
+        <div class="prog-header"><div class="prog-title" id="mpProgTitle">Weekly progress</div><div class="prog-pct" id="mpProgPct">0%</div></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" id="mpProgBar" style="width:0%"></div></div>
+        <div class="prog-sub" id="mpProgSub"></div>
+      </div>
+    </div>
+    <!-- Fruit chip -->
+    <div id="mpFruitWrap" style="display:none;margin:0 20px 14px;background:var(--off);border-radius:14px;padding:14px 16px;border:1px solid var(--card-border)">
+      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:6px">Devil Fruit</div>
+      <div style="font-size:14px;font-weight:500" id="mpFruitName">—</div>
+      <div style="font-size:12px;color:var(--mid);margin-top:3px;line-height:1.5" id="mpFruitEffect">—</div>
+    </div>
+    <!-- Habits section -->
+    <div style="padding:0 20px">
+      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:12px" id="mpHabitsLbl">Habits</div>
+      <div id="mpHabitsList" style="display:flex;flex-direction:column;gap:10px">
+        <div style="font-size:13px;color:var(--mid);padding:20px 0;text-align:center">Loading habits...</div>
+      </div>
+    </div>
+    <!-- Daily study history -->
+    <div style="padding:16px 20px 0">
+      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:12px">Study History — This Week</div>
+      <div id="mpHistoryList" style="display:flex;flex-direction:column;gap:0"></div>
+    </div>
+    <div style="height:24px"></div>
+  </div>
+
+  <!-- HABITS SCREEN -->
+  <div id="habitsScreen" class="screen">
+    <div class="topbar">
+      <div class="topbar-left"><div class="hamburger" onclick="openSidebar()"><span></span><span></span><span></span></div></div>
+      <div class="topbar-title">Habits</div>
+      <div class="avatar" id="habitsAvatar" onclick="openSidebar()">?</div>
+    </div>
+    <div class="habits-summary">
+      <div class="habits-summary-title">My Habits</div>
+      <div class="habits-summary-sub">Build routines that lead to success</div>
+      <div class="habits-summary-stats">
+        <div><div class="habits-stat-val" id="habitsTotalCount" style="color:var(--accent)">0</div><div class="habits-stat-lbl">Total Habits</div></div>
+        <div><div class="habits-stat-val" id="habitsDoneToday" style="color:var(--green)">0</div><div class="habits-stat-lbl">Completed Today</div></div>
+      </div>
+    </div>
+    <div id="habitsList" style="padding:0 20px;display:flex;flex-direction:column;gap:12px"></div>
+    <div style="padding:12px 20px 24px">
+      <button class="habit-add-btn" onclick="openHabitModal()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add a new habit
+      </button>
+    </div>
+  </div>
+
+  <!-- HABIT DETAIL SCREEN -->
+  <div id="habitDetailScreen" class="screen">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="hamburger" onclick="goTo('habits')" style="gap:0;flex-direction:row;align-items:center;width:auto;padding:0">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </div>
+      </div>
+      <div class="topbar-title" id="habitDetailTitle">Habit</div>
+      <button onclick="openHabitModal(viewingHabitId)" style="background:none;border:none;color:var(--mid);cursor:pointer;font-size:18px;padding:4px 8px;line-height:1">&#8943;</button>
+    </div>
+    <div style="padding:0 20px 24px">
+      <!-- Freq + color strip -->
+      <div style="display:flex;align-items:center;gap:10px;padding-top:6px;margin-bottom:18px">
+        <div id="habitDetailColorDot" style="width:10px;height:10px;border-radius:50%;flex-shrink:0"></div>
+        <div id="habitDetailFreq" style="font-size:12px;color:var(--mid);letter-spacing:.5px"></div>
+      </div>
+
+      <!-- This month stats row -->
+      <div id="habitDetailStats" style="display:flex;gap:10px;margin-bottom:20px"></div>
+
+      <!-- Monthly calendar -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid)" id="habitCalMonthLabel">This Month</div>
+        <div style="display:flex;gap:4px">
+          <button onclick="habitDetailPrevMonth()" style="background:var(--off);border:1px solid var(--gray);border-radius:8px;color:var(--mid);width:28px;height:28px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">&#8249;</button>
+          <button onclick="habitDetailNextMonth()" style="background:var(--off);border:1px solid var(--gray);border-radius:8px;color:var(--mid);width:28px;height:28px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">&#8250;</button>
+        </div>
+      </div>
+      <div id="habitMonthCal" class="habit-month-cal"></div>
+
+      <!-- 10-week heatmap -->
+      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin:24px 0 10px">Last 10 Weeks</div>
+      <div id="habitHeatmap" class="habit-heatmap"></div>
+
+      <!-- Bar chart -->
+      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin:20px 0 10px">Weekly completions</div>
+      <div id="habitBarChart" class="habit-barchart"></div>
+    </div>
+  </div>
+
+  <!-- HABIT MODAL -->
+  <div class="modal-overlay" id="habitModal">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-top">
+        <div class="modal-title" id="habitModalTitle">New Habit</div>
+        <button class="modal-close" onclick="closeModal('habitModal')">✕</button>
+      </div>
+      <div class="edit-field">
+        <div class="edit-field-lbl">Habit Name</div>
+        <input class="edit-input" id="habitNameInput" type="text" placeholder="e.g. Meditation, Reading…">
+      </div>
+      <div class="edit-field" style="margin-top:12px">
+        <div class="edit-field-lbl">Frequency</div>
+        <div id="habitFreqPicker" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+          <button class="habit-freq-btn active" data-val="daily" onclick="selectHabitFreq(this)">Every day</button>
+          <button class="habit-freq-btn" data-val="6" onclick="selectHabitFreq(this)">6×/week</button>
+          <button class="habit-freq-btn" data-val="5" onclick="selectHabitFreq(this)">5×/week</button>
+          <button class="habit-freq-btn" data-val="4" onclick="selectHabitFreq(this)">4×/week</button>
+          <button class="habit-freq-btn" data-val="3" onclick="selectHabitFreq(this)">3×/week</button>
+          <button class="habit-freq-btn" data-val="2" onclick="selectHabitFreq(this)">2×/week</button>
+          <button class="habit-freq-btn" data-val="1" onclick="selectHabitFreq(this)">1×/week</button>
+        </div>
+      </div>
+      <div class="edit-field" style="margin-top:12px">
+        <div class="edit-field-lbl">Color</div>
+        <div id="habitColorPicker" style="display:flex;gap:10px;margin-top:8px">
+          <div class="habit-color-dot active" data-color="#6c5ce7" style="background:#6c5ce7" onclick="selectHabitColor(this)"></div>
+          <div class="habit-color-dot" data-color="#00b894" style="background:#00b894" onclick="selectHabitColor(this)"></div>
+          <div class="habit-color-dot" data-color="#e17055" style="background:#e17055" onclick="selectHabitColor(this)"></div>
+          <div class="habit-color-dot" data-color="#fdcb6e" style="background:#fdcb6e" onclick="selectHabitColor(this)"></div>
+          <div class="habit-color-dot" data-color="#74b9ff" style="background:#74b9ff" onclick="selectHabitColor(this)"></div>
+          <div class="habit-color-dot" data-color="#fd79a8" style="background:#fd79a8" onclick="selectHabitColor(this)"></div>
+          <div class="habit-color-dot" data-color="#a29bfe" style="background:#a29bfe" onclick="selectHabitColor(this)"></div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="saveHabit()" style="margin-top:20px" id="habitSaveBtn">Create Habit</button>
+      <button id="habitDeleteBtn" class="btn-logout" onclick="deleteHabit()" style="display:none;margin-top:8px;color:var(--red);border-color:rgba(231,76,60,.3)">Delete Habit</button>
+    </div>
+  </div>
+
+  <!-- ADMIN SCREEN -->
+  <div id="adminScreen" class="screen">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="hamburger" onclick="openSidebar()"><span></span><span></span><span></span></div>
+      </div>
+      <div class="topbar-title">Admin Panel</div>
+      <div class="avatar" id="adminAvatar" onclick="openSidebar()">?</div>
+    </div>
+    <div style="padding:16px 20px 8px">
+      <!-- Add Member -->
+      <div class="admin-section-lbl">Add Member</div>
+      <div class="admin-card">
+        <div class="admin-row" style="margin-bottom:8px">
+          <input class="admin-input" id="adminCpName" type="text" placeholder="Pirate name">
+          <input class="admin-input" id="adminCpReal" type="text" placeholder="Real name">
+        </div>
+        <div class="admin-row" style="margin-bottom:8px">
+          <select class="admin-select" id="adminCpCrew">
+            <option value="Straw Hat Pirates">Straw Hat Pirates</option>
+            <option value="Whitebeard Pirates">Whitebeard Pirates</option>
+            <option value="Kuja Pirates">Kuja Pirates</option>
+            <option value="Heart Pirates">Heart Pirates</option>
+            <option value="Kid Pirates">Kid Pirates</option>
+            <option value="Revolutionary Army">Revolutionary Army</option>
+          </select>
+          <input class="admin-input" id="adminCpGoal" type="number" min="1" max="200" placeholder="Goal hrs" style="max-width:90px">
+        </div>
+        <button class="admin-btn" style="width:100%" onclick="adminAddMember()">Add Member</button>
+      </div>
+
+      <!-- Add Crew -->
+      <div class="admin-section-lbl">Add Crew</div>
+      <div class="admin-card">
+        <div class="admin-row">
+          <input class="admin-input" id="adminCrewName" type="text" placeholder="Crew name">
+          <button class="admin-btn" onclick="adminAddCrew()">Add</button>
+        </div>
+      </div>
+
+      <!-- Manage Pirates -->
+      <div class="admin-section-lbl">Manage Pirates</div>
+      <div class="admin-card">
+        <div id="adminPirateList" class="admin-list"></div>
+      </div>
+      <div style="height:16px"></div>
+    </div>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="loginScreen" class="screen active">
+    <div class="login-wrap">
+      <div class="login-brand">Grand Line — made by JINX</div>
+      <div class="login-hero">
+        <div class="login-eyebrow">Best Ypt Group</div>
+        <div class="login-headline">Welcome<br>aboard,<br>Captain.</div>
+        <div class="login-sub">Sign in with your Google account to join the crew and start tracking.</div>
+      </div>
+      <div class="login-form">
+        <button class="btn-google" id="googleSignInBtn">
+          <svg class="g-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Continue with Google
+        </button>
+        <div class="login-err" id="loginErr"></div>
+      </div>
+      <div class="login-footer">Progress syncs live for the whole crew.</div>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div id="homeScreen" class="screen">
+    <div class="topbar">
+      <div class="topbar-left"><div class="hamburger" onclick="openSidebar()"><span></span><span></span><span></span></div></div>
+      <div class="topbar-title">Home</div>
+      <div class="topbar-right">
+        <div class="badge-pill" id="weekBadge">Week 1</div>
+        <div class="avatar" id="homeAvatar" onclick="openSidebar()">?</div>
+      </div>
+    </div>
+    <div class="section-head">
+      <div class="section-title" id="homeTitle">Dashboard</div>
+      <div class="section-sub" id="homeSub">Grand Line Tournament</div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card dark"><div class="stat-lbl">Berries</div><div class="stat-num" id="hBerries">—</div><div class="stat-note" id="hBountyNote"></div></div>
+      <div class="stat-card"><div class="stat-lbl">Rank</div><div class="stat-num" id="hRank">—</div><div class="stat-note" id="hRankNote"></div></div>
+      <div class="stat-card"><div class="stat-lbl">Hours Done</div><div class="stat-num" id="hLogged">—</div><div class="stat-note" id="hGoalNote"></div></div>
+      <div class="stat-card"><div class="stat-lbl">Streak</div><div class="stat-num" id="hStreak">—</div><div class="stat-note">days</div></div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-card">
+        <div class="prog-header"><div class="prog-title" id="progTitle">Weekly goal</div><div class="prog-pct" id="progPct">0%</div></div>
+        <div class="prog-bar-bg"><div class="prog-bar-fill" id="progBar" style="width:0%"></div></div>
+        <div class="prog-sub" id="progSub"></div>
+      </div>
+    </div>
+    <div class="list-section">
+      <div class="list-header"><div class="list-header-lbl">Top Crews</div></div>
+      <div id="homeTopCrews"></div>
+    </div>
+  </div>
+
+  <!-- MEMBERS -->
+  <div id="membersScreen" class="screen">
+    <div class="topbar">
+      <div class="topbar-left"><div class="hamburger" onclick="openSidebar()"><span></span><span></span><span></span></div></div>
+      <div class="topbar-title">Members</div>
+      <div class="avatar" id="membersAvatar" onclick="openSidebar()">?</div>
+    </div>
+    <div class="week-tabs" id="weekTabsMembers"></div>
+    <div class="search-row">
+      <input class="search-input" id="memberSearch" type="text" placeholder="Search by name or crew..." oninput="filterMembers()">
+      <button class="sort-btn" id="sortBtn" onclick="toggleSort()">Sort</button>
+    </div>
+    <div class="list-section">
+      <div class="list-header"><div class="list-header-lbl" id="memberCount">Pirates</div></div>
+      <div id="memberList"></div>
+    </div>
+  </div>
+
+  <!-- ME / PROFILE -->
+  <div id="profileScreen" class="screen">
+    <div class="topbar">
+      <div class="topbar-left"><div class="hamburger" onclick="openSidebar()"><span></span><span></span><span></span></div></div>
+      <div class="topbar-title">Me</div>
+      <div class="avatar" id="profileAvatar" onclick="openSidebar()">?</div>
+    </div>
+    <div class="profile-hero">
+      <div class="profile-avatar-lg" id="profileAvatarLg">?</div>
+      <div>
+        <div class="profile-name" id="profileName">—</div>
+        <div class="profile-real" id="profileReal">—</div>
+        <div class="profile-crew" id="profileCrew">—</div>
+      </div>
+    </div>
+    <div class="p-stats">
+      <div class="p-stat"><div class="p-stat-val" id="pBerries">—</div><div class="p-stat-lbl">Berries</div></div>
+      <div class="p-stat"><div class="p-stat-val" id="pPct">—</div><div class="p-stat-lbl">Goal</div></div>
+      <div class="p-stat"><div class="p-stat-val" id="pStreak">—</div><div class="p-stat-lbl">Streak</div></div>
+    </div>
+    <div id="notLinkedMsg" style="display:none">
+      <div class="not-linked-msg" style="margin-bottom:10px">Your login does not match any pirate yet. Create your player below, or ask JINX to add you.</div>
+      <div id="createPlayerCard" class="create-player-card">
+        <div class="create-player-lbl">Create Your Pirate</div>
+        <div id="createPlayerForm">
+          <div class="edit-field"><div class="edit-field-lbl">Pirate Name</div><input class="edit-input" id="cpName" type="text" placeholder="Your pirate alias"></div>
+          <div class="edit-field"><div class="edit-field-lbl">Real Name</div><input class="edit-input" id="cpReal" type="text" placeholder="Your actual name"></div>
+          <div class="edit-field">
+            <div class="edit-field-lbl">Crew</div>
+            <select class="crew-select" id="cpCrew">
+              <option value="Straw Hat Pirates">Straw Hat Pirates</option>
+              <option value="Whitebeard Pirates">Whitebeard Pirates</option>
+              <option value="Kuja Pirates">Kuja Pirates</option>
+              <option value="Heart Pirates">Heart Pirates</option>
+              <option value="Kid Pirates">Kid Pirates</option>
+              <option value="Revolutionary Army">Revolutionary Army</option>
+            </select>
+          </div>
+          <div class="edit-field"><div class="edit-field-lbl">Weekly Goal (hours)</div><input class="edit-input" id="cpGoal" type="number" min="1" max="200" placeholder="e.g. 40"></div>
+          <div class="edit-field">
+            <div class="edit-field-lbl">Devil Fruit</div>
+            <div style="font-size:11px;color:var(--mid);margin-bottom:8px;line-height:1.5">Choose one ability to help you earn berries. You can't change this later.</div>
+            <div id="cpFruitList" style="display:flex;flex-direction:column;gap:8px"></div>
+          </div>
+          <button class="btn-primary" onclick="createPlayer()" style="margin-top:4px">Join the Grand Line</button>
+        </div>
+      </div>
+    </div>
+    <div id="logCardWrap">
+      <div class="log-card">
+        <div class="log-card-lbl">Log Study Hours</div>
+        <div class="log-stepper">
+          <button class="log-btn" onclick="changeHrs(-0.5)">-</button>
+          <div class="log-hrs" id="logHrsDisplay">2.0</div>
+          <button class="log-btn" onclick="changeHrs(0.5)">+</button>
+        </div>
+        <div class="log-unit">hours to add</div>
+        <input class="log-note-input" id="logNote" type="text" placeholder="Add a note (optional)">
+        <button class="log-submit" onclick="submitLog()">Log It</button>
+      </div>
+    </div>
+    <div class="edit-card">
+      <div class="edit-card-lbl">Edit Your Info</div>
+      <div class="edit-field"><div class="edit-field-lbl">Display Name <span style="color:var(--mid);font-weight:400">(shown in chat &amp; app)</span></div><input class="edit-input" id="editDisplayName" type="text" placeholder="Leave blank to use Google name"></div>
+      <div class="edit-field"><div class="edit-field-lbl">Weekly Goal (hours)</div><input class="edit-input" id="editGoal" type="number" min="1" max="200"></div>
+      <div class="edit-field"><div class="edit-field-lbl">Pirate Name</div><input class="edit-input" id="editName" type="text"></div>
+      <button class="btn-primary" onclick="saveProfile()">Save Changes</button>
+      <button class="btn-logout" onclick="doLogout()">Log out</button>
+    </div>
+
+    <!-- Fruit ability card -->
+    <div id="fruitInfoCard" style="display:none;margin:0 20px 14px;background:var(--off);border-radius:18px;padding:18px;border:1.5px solid var(--gray)">
+      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:10px">Your Devil Fruit</div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px">
+        <div style="font-size:15px;font-weight:500" id="fruitInfoName">—</div>
+        <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;background:var(--gray);border-radius:6px;padding:3px 8px;color:var(--mid)" id="fruitInfoWhen">—</div>
+      </div>
+      <div style="font-size:13px;color:var(--mid);line-height:1.55" id="fruitInfoEffect">—</div>
+    </div>
+
+    <!-- Admin shortcut (admin only, shown via JS) -->
+    <div id="profileAdminCard" style="display:none;margin:0 20px 14px;border:1.5px solid rgba(108,92,231,.3);border-radius:18px;padding:16px 18px;background:rgba(108,92,231,0.06)">
+      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:8px">Admin</div>
+      <button class="btn-primary" onclick="closeSidebar();goTo('admin')" style="margin-bottom:8px">Open Admin Panel</button>
+      <button class="btn-primary" onclick="confirmAdvanceWeek()" style="background:var(--off);color:var(--mid);border:1.5px solid var(--gray);box-shadow:none">Close Week and Advance</button>
+    </div>
+
+    <!-- My study history -->
+    <div style="margin:0 20px 14px;background:var(--off);border-radius:18px;padding:16px 18px;border:1px solid var(--card-border)">
+      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:4px">Study History — This Week</div>
+      <div id="myHistoryList"></div>
+    </div>
+
+    <div style="height:8px"></div>
+  </div>
+
+  <!-- CREWS -->
+  <div id="crewsScreen" class="screen">
+    <div class="topbar">
+      <div class="topbar-left"><div class="hamburger" onclick="openSidebar()"><span></span><span></span><span></span></div></div>
+      <div class="topbar-title">Crews</div>
+      <div class="avatar" id="crewsAvatar" onclick="openSidebar()">?</div>
+    </div>
+    <div class="week-tabs" id="weekTabsCrews"></div>
+    <div class="section-head" style="padding-top:0">
+      <div class="section-sub" id="crewsSub">Team standings</div>
+    </div>
+    <div class="crew-list" id="crewList"></div>
+    <div style="height:8px"></div>
+  </div>
+
+  <!-- FRUITS SCREEN -->
+  <div id="fruitsScreen" class="screen">
+    <div class="topbar">
+      <div class="topbar-left"><div class="hamburger" onclick="openSidebar()"><span></span><span></span><span></span></div></div>
+      <div class="topbar-title">Devil Fruits</div>
+      <div class="avatar" id="fruitsAvatar" onclick="openSidebar()">?</div>
+    </div>
+    <div class="section-head">
+      <div class="section-sub" id="fruitsSub">All 12 fruits — tap to equip yours</div>
+    </div>
+    <div id="fruitGrid" style="padding:0 20px;display:flex;flex-direction:column;gap:10px;padding-bottom:8px"></div>
+    <div style="height:8px"></div>
+  </div>
+
+  <!-- TIMER SCREEN -->
+  <div id="timerScreen" class="screen">
+    <div class="topbar">
+      <div class="topbar-left"><div class="hamburger" onclick="openSidebar()"><span></span><span></span><span></span></div></div>
+      <div class="topbar-title">Timer</div>
+      <div class="avatar" id="timerAvatar" onclick="openSidebar()">?</div>
+    </div>
+    <div class="timer-hero">
+      <div class="timer-ring-wrap">
+        <svg class="timer-ring-svg" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+          <circle class="timer-ring-track" cx="120" cy="120" r="110"/>
+          <circle class="timer-ring-fill" id="timerRingFill" cx="120" cy="120" r="110"/>
+        </svg>
+        <div class="timer-center">
+          <div class="timer-display" id="timerDisplay">00:00:00</div>
+          <div class="timer-label" id="timerLabel">Ready to study</div>
+        </div>
+      </div>
+      <div class="timer-controls" id="timerControls">
+        <!-- Idle state: just a Start button -->
+        <button class="timer-start-btn" id="timerStartBtn" onclick="timerToggle()">Start</button>
+        <!-- Active state: unified control bar -->
+        <div class="timer-ctrl-bar" id="timerCtrlBar" style="display:none">
+          <button class="timer-ctrl-item danger" id="timerResetBtn" onclick="timerReset()">Reset</button>
+          <div class="timer-ctrl-divider"></div>
+          <button class="timer-ctrl-item center" id="timerMainBtn" onclick="timerToggle()">Pause</button>
+          <div class="timer-ctrl-divider"></div>
+          <button class="timer-ctrl-item" id="timerLapBtn" onclick="timerLap()">Lap</button>
+        </div>
+      </div>
+    </div>
+    <div class="timer-total-bar" id="timerTotalBar" style="display:none">
+      <div class="timer-total-lbl">Total today</div>
+      <div class="timer-total-val" id="timerTotalVal">0h 0m</div>
+    </div>
+    <!-- Manual Log Card -->
+    <div class="timer-manual-card">
+      <div class="timer-manual-lbl">Log Hours Manually</div>
+      <div class="timer-manual-stepper">
+        <button class="timer-manual-btn" onclick="manualHrsChange(-0.5)">−</button>
+        <div class="timer-manual-val" id="manualHrsDisplay">1.0</div>
+        <button class="timer-manual-btn" onclick="manualHrsChange(0.5)">+</button>
+      </div>
+      <div class="timer-manual-unit">hours</div>
+      <button class="timer-manual-submit" onclick="submitManualLog()">Add to My Log</button>
+    </div>
+    <div class="list-section">
+      <div class="list-header" id="timerSessionsHeader" style="display:none">
+        <div class="list-header-lbl">Sessions — tap to log</div>
+      </div>
+      <div class="timer-sessions" id="timerSessions"></div>
+    </div>
+    <div style="height:8px"></div>
+  </div>
+
+  <!-- CHAT SCREEN -->
+  <div id="chatScreen" class="screen">
+    <div class="topbar" style="flex-shrink:0">
+      <div class="topbar-left"><div class="hamburger" onclick="openSidebar()"><span></span><span></span><span></span></div></div>
+      <div class="topbar-title">Chat</div>
+      <div class="avatar" id="chatAvatar" onclick="openSidebar()">?</div>
+    </div>
+    <div class="chat-wrap">
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-empty" id="chatEmpty">
+          <div class="chat-empty-title">No messages yet</div>
+          <div class="chat-empty-sub">Be the first to say something</div>
+        </div>
+      </div>
+      <div class="chat-input-wrap">
+        <textarea class="chat-input" id="chatInput" placeholder="Message the crew..." rows="1" oninput="chatAutoResize(this)" onkeydown="chatKeydown(event)"></textarea>
+        <button class="chat-send-btn" onclick="sendChatMessage()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<!-- Member Modal -->
+<div class="modal-overlay" id="memberModal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-top">
+      <div class="modal-title" id="modalTitle">Pirate</div>
+      <button class="modal-close" onclick="closeModal('memberModal')">x</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Intensity Picker Popup -->
+<div id="intensityPopup" style="display:none;position:fixed;inset:0;z-index:62;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.5)" onclick="closeIntensityPopup()">
+  <div class="int-popup" onclick="event.stopPropagation()">
+    <div class="int-popup-title" id="intPopupTitle">How intense was it today?</div>
+    <div class="int-levels">
+      <div class="int-level-btn" id="intBtn1" onclick="selectIntensity(1)">
+        <div class="int-level-dots"><div class="int-level-dot" style="background:var(--accent);opacity:.4"></div><div class="int-level-dot" style="background:var(--gray)"></div><div class="int-level-dot" style="background:var(--gray)"></div></div>
+        <div class="int-level-label">Low</div>
+        <div class="int-level-sub">Easy day</div>
+      </div>
+      <div class="int-level-btn" id="intBtn2" onclick="selectIntensity(2)">
+        <div class="int-level-dots"><div class="int-level-dot" style="background:var(--accent);opacity:.7"></div><div class="int-level-dot" style="background:var(--accent);opacity:.7"></div><div class="int-level-dot" style="background:var(--gray)"></div></div>
+        <div class="int-level-label">Mid</div>
+        <div class="int-level-sub">Good effort</div>
+      </div>
+      <div class="int-level-btn selected" id="intBtn3" onclick="selectIntensity(3)">
+        <div class="int-level-dots"><div class="int-level-dot" style="background:var(--accent)"></div><div class="int-level-dot" style="background:var(--accent)"></div><div class="int-level-dot" style="background:var(--accent)"></div></div>
+        <div class="int-level-label">High</div>
+        <div class="int-level-sub">Crushed it</div>
+      </div>
+    </div>
+    <button class="int-confirm-btn" id="intConfirmBtn" onclick="confirmIntensity()">Log it</button>
+    <button class="int-cancel-btn" onclick="closeIntensityPopup()">Cancel</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase SDKs at end of body so they are definitely parsed before the script below -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+<script>
+// ── FIREBASE ──
+var db, dbRef, auth;
+try {
+  firebase.initializeApp({
+    apiKey: "AIzaSyDm4Hx8Lu2gihDKbTMilUu4oB2Ih1ZId2g",
+    authDomain: "ariarohiatre.firebaseapp.com",
+    databaseURL: "https://ariarohiatre-default-rtdb.firebaseio.com",
+    projectId: "ariarohiatre",
+    appId: "1:881880075109:web:ec779dbb804c8b01616f8c"
+  });
+  db    = firebase.database();
+  dbRef = db.ref('tournament');
+  auth  = firebase.auth();
+} catch(e) { console.error('Firebase init failed:', e); }
+
+// ── CONSTANTS ──
+var TOTAL_WEEKS = 4;
+var ARC_NAMES   = ['East Blue Arc','Grand Line Arc','New World Arc','Final Arc'];
+var CREW_ICONS  = {"Straw Hat Pirates":"SH","Heart Pirates":"HP","Kid Pirates":"KP","Revolutionary Army":"RA","Whitebeard Pirates":"WB","Kuja Pirates":"KJ"};
+var FRUITS = [
+  {id:"gum",    name:"Gum-Gum Fruit",    when:"per log",  effect:"Earn +40 bonus berries for each 10% of your weekly goal you cross (up to +400 total)"},
+  {id:"dark",   name:"Dark-Dark Fruit",  when:"per log",  effect:"Earn +200 berries at 50% goal and another +200 when you hit 100%"},
+  {id:"rumble", name:"Rumble-Rumble Fruit",when:"per log", effect:"Your first study log each day is counted as 1.25x the actual hours"},
+  {id:"op",     name:"Op-Op Fruit",      when:"per log",  effect:"When you complete your weekly goal, every crewmate earns +100 berries"},
+  {id:"ice",    name:"Ice-Ice Fruit",    when:"week end", effect:"Complete your weekly goal with a 5-day streak: earn +400 bonus berries"},
+];
+
+// ── STATE ──
+var state = {activeWeek:0, weeks:Array.from({length:TOTAL_WEEKS},function(){ return {locked:false,pirates:[]}; })};
+var viewingWeek   = 0;
+var currentUser   = null;
+var currentPirate = null;
+var logHrsVal     = 2.0;
+var memberSort    = 'berries';
+var memberSearch  = '';
+var selectedFruit = '';
+
+function buildFruitPicker(){
+  selectedFruit = ''; // fix 8: always reset on open
+  var el = document.getElementById('cpFruitList'); if(!el) return;
+  el.innerHTML = FRUITS.map(function(f){
+    return '<div class="fruit-pick-item'+(selectedFruit===f.id?' selected':'')+'" onclick="selectFruit(\''+f.id+'\')" id="fpItem_'+f.id+'">'
+      +'<div class="fruit-pick-radio"><div class="fruit-pick-radio-dot"></div></div>'
+      +'<div class="fruit-pick-info"><div class="fruit-pick-name">'+esc(f.name)+'</div>'
+      +'<div class="fruit-pick-effect">'+esc(f.effect)+'</div></div>'
+    +'</div>';
+  }).join('');
+}
+function selectFruit(id){
+  selectedFruit = id;
+  FRUITS.forEach(function(f){
+    var el = document.getElementById('fpItem_'+f.id);
+    if(el) el.className = 'fruit-pick-item'+(f.id===id?' selected':'');
+  });
+}
+
+function score(p){ return p.bounty || 0; }
+function getFruit(id){ return FRUITS.find(function(f){ return f.id === id; }); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ── SPLASH ──
+function hideSplash(){
+  var el = document.getElementById('splashScreen');
+  if(!el) return;
+  el.classList.add('hide');
+  setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 500);
+}
+document.getElementById('splashBtn').addEventListener('click', hideSplash);
+// If returning from Google redirect, skip splash entirely
+if(localStorage.getItem('glt_pendingRedirect')){
+  hideSplash();
+} else {
+  setTimeout(hideSplash, 10000);
+}
+
+// ── GOOGLE SIGN-IN ──
+// Uses popup — works reliably on GitHub Pages and all hosting.
+// Detect if running inside the Android app
+var IS_APP = navigator.userAgent.indexOf('BestYptApp') !== -1;
+
+document.getElementById('googleSignInBtn').addEventListener('click', function(){
+  if(!auth){ toast('Google sign-in is not available right now.'); return; }
+  var provider = new firebase.auth.GoogleAuthProvider();
+  provider.addScope('email');
+  provider.addScope('profile');
+
+  if(IS_APP){
+    // In the Android WebView app, popup doesn't work — use redirect instead
+    auth.signInWithRedirect(provider).catch(function(e){
+      toast('Sign-in failed: ' + e.message);
+    });
+  } else {
+    // In the browser, use popup as normal
+    auth.signInWithPopup(provider).then(function(result){
+      if(result && result.user){
+        var u   = result.user;
+        var key = (u.email ? u.email.split('@')[0] : (u.displayName || 'user')).toLowerCase().replace(/[^a-z0-9]/g,'');
+        onLoginSuccess({uid:u.uid, displayName:u.displayName||key, email:u.email||'', key:key, photoURL:u.photoURL||''}, true);
+      }
+    }).catch(function(e){
+      if(e.code !== 'auth/popup-closed-by-user'){
+        toast('Sign-in failed: ' + e.message);
+      }
+    });
+  }
+});
+
+function onLoginSuccess(user, isNew){
+  currentUser = user;
+  localStorage.setItem('glt_lastUserKey',     user.key);
+  localStorage.setItem('glt_lastUserDisplay', user.displayName||user.key);
+  localStorage.setItem('glt_lastUserUid',     user.uid||'');
+  localStorage.setItem('glt_lastUserPhoto',   user.photoURL||'');
+  localStorage.setItem('glt_lastUserEmail',   user.email||'');
+  localStorage.removeItem('glt_pendingRedirect');
+  document.getElementById('loginScreen').classList.remove('active');
+  document.getElementById('homeScreen').classList.add('active');
+  hideSplash();
+  matchPirate();
+  loadFromFirebase();
+  initHabits();
+  toast(isNew ? 'Welcome aboard, '+(user.displayName||user.key)+'!' : 'Welcome back, '+(user.displayName||user.key)+'!');
+}
+
+function doLogout(){
+  currentUser = null; currentPirate = null;
+  // Wipe ALL app-related keys from localStorage
+  Object.keys(localStorage).filter(function(k){ return k.startsWith('glt_'); })
+    .forEach(function(k){ localStorage.removeItem(k); });
+  localStorage.removeItem('glt_myPirateId');
+  if(auth && auth.currentUser) auth.signOut().catch(function(){});
+  // Kill Firebase live listener so stale data doesn't re-render
+  if(dbRef) dbRef.off();
+  if(chatRef){ chatRef.off(); chatListening=false; }
+  if(habitsRef){ habitsRef.off(); habitsRef=null; }
+  userHabits=[]; viewingHabitId=null;
+  ['homeScreen','membersScreen','profileScreen','crewsScreen','fruitsScreen','timerScreen','chatScreen','adminScreen','habitsScreen','habitDetailScreen','memberProfileScreen'].forEach(function(id){
+    var el = document.getElementById(id); if(el) el.classList.remove('active');
+  });
+  document.getElementById('loginScreen').classList.add('active');
+  document.getElementById('loginErr').textContent = '';
+  toast('Logged out successfully.');
+}
+
+// ── PIRATE MATCHING ──
+function matchPirate(){
+  if(!currentUser){ currentPirate=null; return; }
+  var pirates = state.weeks[state.activeWeek].pirates || [];
+  var key = currentUser.key;
+  var storedId = localStorage.getItem('glt_myPirateId');
+  // First try to match by stored pirate ID (most reliable)
+  if(storedId){
+    currentPirate = pirates.find(function(p){ return String(p.id) === storedId; }) || null;
+    if(currentPirate) return;
+  }
+  // Fall back to key-based matching
+  currentPirate = pirates.find(function(p){
+    return p.real.toLowerCase().replace(/\s/g,'') === key ||
+           p.name.toLowerCase().replace(/\s/g,'') === key ||
+           p.real.toLowerCase().split(' ')[0] === key ||
+           p.name.toLowerCase().split(' ')[0] === key;
+  }) || null;
+  // If found by key, save the ID for future
+  if(currentPirate) localStorage.setItem('glt_myPirateId', String(currentPirate.id));
+}
+
+// ── DAILY RESET ──
+function todayKey(){
+  return dateStr(new Date()); // uses the single dateStr function — no duplication
+}
+
+var _midnightTimer = null; // fix 3: prevent stacking timers
+function runDailyReset(){
+  var today = todayKey();
+  var changed = false;
+  state.weeks.forEach(function(w){
+    (w.pirates||[]).forEach(function(p){
+      if(p._lastLogDate !== today){
+        p._loggedToday    = false;
+        p._hasLoggedToday = false;
+        p._lastLogDate    = today;
+        changed = true;
+      }
+    });
+  });
+  if(changed){
+    manualHrsVal = 1.0; // fix 9: reset manual hours stepper each day
+    var el = document.getElementById('manualHrsDisplay');
+    if(el) el.textContent = '1.0';
+    saveState();
+  }
+}
+
+function scheduleMidnightReset(){
+  if(_midnightTimer) clearTimeout(_midnightTimer); // fix 3: cancel any existing timer
+  var now = new Date();
+  var msToMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1).getTime() - now.getTime();
+  _midnightTimer = setTimeout(function(){
+    _midnightTimer = null;
+    runDailyReset();
+    renderAll();
+    scheduleMidnightReset();
+  }, msToMidnight + 500);
+}
+
+// ── FIREBASE ──
+function setLoad(pct){
+  var el = document.getElementById('loadFill');
+  el.style.width = pct+'%';
+  if(pct >= 100) setTimeout(function(){ el.style.opacity='0'; }, 600);
+}
+
+function loadFromFirebase(){
+  if(!dbRef){ renderAll(); return; }
+  setLoad(20);
+  dbRef.once('value').then(function(snap){
+    var data = snap.val();
+    if(data && data.weeks){
+      data.weeks = Array.from({length:TOTAL_WEEKS}, function(_,i){
+        var w = data.weeks[i]||{}; return {locked:w.locked||false, pirates:w.pirates||[]};
+      });
+      state = data; viewingWeek = state.activeWeek;
+    }
+    setLoad(100); matchPirate();
+    runDailyReset();
+    scheduleMidnightReset();
+    // Sync current user's photoURL onto their pirate record
+    if(currentUser && currentPirate && currentUser.photoURL){
+      var wp = state.weeks[state.activeWeek];
+      var pp = (wp.pirates||[]).find(function(x){ return x.id===currentPirate.id; });
+      if(pp && pp.photoURL !== currentUser.photoURL){
+        pp.photoURL = currentUser.photoURL;
+        pp.uid = pp.uid || currentUser.uid;
+        dbRef.set(state).catch(function(){});
+      }
+    }
+    renderAll();
+    dbRef.on('value', function(s){
+      var d = s.val();
+      if(!d||!d.weeks) return;
+      d.weeks = Array.from({length:TOTAL_WEEKS}, function(_,i){
+        var w=d.weeks[i]||{}; return {locked:w.locked||false,pirates:w.pirates||[]};
+      });
+      state=d; matchPirate(); debouncedRenderAll();
+    });
+  }).catch(function(e){ setLoad(100); toast('Offline — using local data'); renderAll(); });
+}
+
+var _renderDebounce = null;
+function debouncedRenderAll(){
+  clearTimeout(_renderDebounce);
+  _renderDebounce = setTimeout(renderAll, 150);
+}
+
+function saveState(){
+  localStorage.setItem('glt_v3', JSON.stringify(state));
+  if(dbRef) dbRef.set(state).catch(function(e){ toast('Save error: '+e.message); });
+}
+
+// ── NAVIGATION ──
+var ADMIN_EMAIL = 'aditya7karale@gmail.com';
+var ADMIN_KEY   = 'aditya7karale';
+
+function isAdmin(){
+  if(!currentUser) return false;
+  return currentUser.key === ADMIN_KEY || (currentUser.email && currentUser.email.toLowerCase() === ADMIN_EMAIL);
+}
+
+var SCREENS = {home:'homeScreen', members:'membersScreen', timer:'timerScreen', chat:'chatScreen', profile:'profileScreen', fruits:'fruitsScreen', crews:'crewsScreen', habits:'habitsScreen', habitDetail:'habitDetailScreen', memberProfile:'memberProfileScreen', admin:'adminScreen'};
+
+function goTo(key){
+  if(key === 'admin' && !isAdmin()){ toast('Access denied.'); return; }
+  Object.keys(SCREENS).forEach(function(k){
+    document.getElementById(SCREENS[k]).classList.toggle('active', k===key);
+    var n = document.getElementById('nav-'+k);
+    if(n) n.classList.toggle('active', k===key);
+  });
+  var fn = {home:renderHome, members:renderMembers, timer:renderTimer, chat:renderChat, profile:renderProfile, fruits:renderFruits, crews:renderCrews, habits:renderHabits, admin:renderAdmin};
+  if(fn[key]) fn[key]();
+}
+
+// ── SIDEBAR ──
+function openSidebar(){
+  var s = document.getElementById('sidebar');
+  var o = document.getElementById('sidebarOverlay');
+  if(!s||!o) return;
+  s.classList.add('open'); o.classList.add('open');
+  // Update sidebar user info
+  var photo = currentUser ? (currentUser.photoURL||'') : '';
+  var init  = getDisplayName().slice(0,2).toUpperCase();
+  var sa = document.getElementById('sidebarAvatar');
+  if(sa){ sa.innerHTML = photo ? '<img src="'+esc(photo)+'" alt="" referrerpolicy="no-referrer">' : init; }
+  var sn = document.getElementById('sidebarName'); if(sn) sn.textContent = getDisplayName();
+  var se = document.getElementById('sidebarEmail'); if(se) se.textContent = currentUser ? (currentUser.email||currentUser.key) : '';
+  // Show admin section only for admin
+  var adminSec = document.getElementById('sidebarAdminSection');
+  if(adminSec) adminSec.style.display = isAdmin() ? 'block' : 'none';
+  // Highlight active screen
+  Object.keys(SCREENS).forEach(function(k){
+    var el = document.getElementById('snav-'+k); if(!el) return;
+    el.classList.toggle('active', document.getElementById(SCREENS[k]).classList.contains('active'));
+  });
+}
+function closeSidebar(){
+  var s = document.getElementById('sidebar');
+  var o = document.getElementById('sidebarOverlay');
+  if(s) s.classList.remove('open');
+  if(o) o.classList.remove('open');
+}
+function sidebarGoTo(key){
+  closeSidebar();
+  setTimeout(function(){ goTo(key); }, 180);
+}
+
+// ── ADMIN ──
+function renderAdmin(){
+  if(!isAdmin()){ goTo('home'); return; }
+  updateAvatars();
+  renderAdminPirateList();
+  // Populate crew dropdowns with current crews
+  var w = state.weeks[state.activeWeek];
+  var crews = [];
+  (w.pirates||[]).forEach(function(p){ if(p.crew && !crews.includes(p.crew)) crews.push(p.crew); });
+  // Add known crews
+  ['Straw Hat Pirates','Whitebeard Pirates','Kuja Pirates','Heart Pirates','Kid Pirates','Revolutionary Army'].forEach(function(c){ if(!crews.includes(c)) crews.push(c); });
+  ['adminCpCrew'].forEach(function(id){
+    var el = document.getElementById(id); if(!el) return;
+    el.innerHTML = crews.map(function(c){ return '<option value="'+esc(c)+'">'+esc(c)+'</option>'; }).join('');
+  });
+}
+
+function renderAdminPirateList(){
+  var w = state.weeks[state.activeWeek];
+  var el = document.getElementById('adminPirateList'); if(!el) return;
+  var pirates = w.pirates||[];
+  if(!pirates.length){ el.innerHTML='<div style="font-size:13px;color:var(--mid);padding:8px 0">No pirates this week</div>'; return; }
+  el.innerHTML = pirates.map(function(p){
+    var fruitName = p.fruit ? (getFruit(p.fruit)||{name:p.fruit}).name : 'None';
+    var fruitOpts = '<option value="">None</option>'+FRUITS.map(function(f){
+      return '<option value="'+f.id+'"'+(p.fruit===f.id?' selected':'')+'>'+esc(f.name)+'</option>';
+    }).join('');
+    return '<div class="admin-pirate-row" style="flex-direction:column;align-items:stretch;gap:8px">'
+      +'<div style="display:flex;align-items:center;gap:10px">'
+        +'<div style="flex:1;min-width:0">'
+          +'<div class="admin-pirate-name">'+esc(p.name)+(p.banned?' <span style="font-size:10px;color:var(--red)">[BANNED]</span>':'')+'</div>'
+          +'<div class="admin-pirate-meta">'+esc(p.real||'—')+' · '+esc(p.crew||'—')+' · '+Math.round((p.logged||0)*10)/10+'h / '+(p.goal||0)+'h</div>'
+        +'</div>'
+        +'<div class="admin-actions">'
+          +'<button class="admin-icon-btn" title="−1h" onclick="adminDecreaseHrs('+p.id+')" style="font-size:11px;color:var(--orange);border-color:rgba(243,156,18,.4);width:36px">−1h</button>'
+          +'<button class="admin-icon-btn kick" onclick="adminKick('+p.id+')" style="width:36px;font-size:11px">Kick</button>'
+          +'<button class="admin-icon-btn ban" onclick="adminBan('+p.id+')" style="width:36px;font-size:11px">Ban</button>'
+        +'</div>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:8px">'
+        +'<div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--mid);flex-shrink:0">Fruit</div>'
+        +'<select class="admin-select" style="flex:1;font-size:12px;padding:6px 10px" onchange="adminAssignFruit('+p.id+',this.value)">'+fruitOpts+'</select>'
+      +'</div>'
+    +'</div>';
+  }).join('');
+}
+
+function adminAddMember(){
+  if(!isAdmin()) return;
+  var name = document.getElementById('adminCpName').value.trim();
+  var real = document.getElementById('adminCpReal').value.trim();
+  var crew = document.getElementById('adminCpCrew').value;
+  var goal = parseFloat(document.getElementById('adminCpGoal').value);
+  if(!name||!real){ toast('Enter pirate and real name.'); return; }
+  if(!goal||goal<1){ toast('Enter a valid goal.'); return; }
+  var w = state.weeks[state.activeWeek];
+  if(w.pirates.find(function(p){ return p.name.toLowerCase()===name.toLowerCase(); })){ toast('Name taken.'); return; }
+  w.pirates.push({
+    id:Date.now(), name:name, real:real, crew:crew, goal:goal,
+    logged:0, streak:0, bounty:1000, fruit:'',
+    _weekStartBounty:1000, _streakAtWeekStart:0,
+    _hasLoggedToday:false, _loggedToday:false, _history:[]
+  });
+  document.getElementById('adminCpName').value='';
+  document.getElementById('adminCpReal').value='';
+  document.getElementById('adminCpGoal').value='';
+  toast('Added '+name+'!');
+  saveState(); renderAdminPirateList(); renderAll();
+}
+
+function adminAddCrew(){
+  if(!isAdmin()) return;
+  var name = document.getElementById('adminCrewName').value.trim();
+  if(!name){ toast('Enter a crew name.'); return; }
+  if(!CREW_ICONS[name]){
+    CREW_ICONS[name] = name.slice(0,2).toUpperCase();
+  }
+  document.getElementById('adminCrewName').value='';
+  toast('Crew "'+name+'" added. Assign members to activate it.');
+  renderAdmin();
+}
+
+function adminDecreaseHrs(id){
+  if(!isAdmin()) return;
+  var w = state.weeks[state.activeWeek];
+  var p = w.pirates.find(function(x){ return x.id===id; });
+  if(!p){ toast('Pirate not found.'); return; }
+  if(p.logged <= 0){ toast(p.name+' already has 0h logged.'); return; }
+  var removeHrs = Math.min(1, p.logged);
+  p.logged = Math.round((p.logged - removeHrs)*10)/10;
+  // Recalc berries (simple deduction — 50 base per milestone lost)
+  toast('Removed 1h from '+p.name+'. Now at '+p.logged+'h.');
+  saveState(); renderAdminPirateList(); renderAll();
+}
+
+function adminKick(id){
+  if(!isAdmin()) return;
+  var w = state.weeks[state.activeWeek];
+  var p = w.pirates.find(function(x){ return x.id===id; });
+  if(!p){ return; }
+  if(!confirm('Kick '+p.name+' ('+p.real+') from this week?\nThey can rejoin by creating a new pirate.')){ return; }
+  w.pirates = w.pirates.filter(function(x){ return x.id!==id; });
+  toast(p.name+' was kicked.');
+  saveState(); renderAdminPirateList(); renderAll();
+}
+
+function adminBan(id){
+  if(!isAdmin()) return;
+  var w = state.weeks[state.activeWeek];
+  var p = w.pirates.find(function(x){ return x.id===id; });
+  if(!p){ return; }
+  if(!confirm('BAN '+p.name+' ('+p.real+')?\nThey will be removed and blocked from rejoining.')){ return; }
+  // Fix 15: use UID as ban key — real names can collide
+  var banKey = p.uid || ('name_'+p.real.toLowerCase().replace(/\s/g,'')+'_'+p.id);
+  if(db){ db.ref('banned/'+banKey).set({real:p.real, name:p.name, uid:p.uid||'', ts:Date.now()}); }
+  w.pirates = w.pirates.filter(function(x){ return x.id!==id; });
+  toast(p.name+' was banned.');
+  saveState(); renderAdminPirateList(); renderAll();
+}
+
+function adminAssignFruit(id, fruitId){
+  if(!isAdmin()) return;
+  var w = state.weeks[state.activeWeek];
+  var p = w.pirates.find(function(x){ return x.id===id; });
+  if(!p){ toast('Pirate not found.'); return; }
+  p.fruit = fruitId;
+  var fruitName = fruitId ? (getFruit(fruitId)||{name:fruitId}).name : 'None';
+  toast(p.name+' assigned '+fruitName+'.');
+  saveState(); renderAll();
+}
+
+function renderAll(){
+  renderHome(); renderMembers(); renderProfile(); renderFruits(); renderCrews(); renderWeekTabs(); updateAvatars(); renderTimer();
+  // Fix 12: only render admin list when admin panel is actually open
+  var adminScreen = document.getElementById('adminScreen');
+  if(isAdmin() && adminScreen && adminScreen.classList.contains('active')){
+    renderAdminPirateList();
+  }
+}
+
+function getDisplayName(){
+  var custom = localStorage.getItem('glt_customDisplayName');
+  if(custom && custom.trim()) return custom.trim();
+  return currentUser ? (currentUser.displayName||currentUser.key||'?') : '?';
+}
+
+function updateAvatars(){
+  var name = getDisplayName();
+  var init = name.slice(0,2).toUpperCase();
+  var photo = currentUser ? (currentUser.photoURL||'') : '';
+  ['homeAvatar','membersAvatar','timerAvatar','chatAvatar','profileAvatar','fruitsAvatar','crewsAvatar','profileAvatarLg','habitsAvatar'].forEach(function(id){
+    var el=document.getElementById(id); if(!el) return;
+    if(photo){
+      el.innerHTML='<img src="'+esc(photo)+'" alt="avatar" referrerpolicy="no-referrer">';
+    } else {
+      el.textContent=init;
+    }
+  });
+}
+
+// ── HOME ──
+function renderHome(){
+  var w = state.weeks[state.activeWeek];
+  var sorted = (w.pirates||[]).slice().sort(function(a,b){ return score(b)-score(a); });
+  document.getElementById('weekBadge').textContent = 'Week '+(state.activeWeek+1);
+  matchPirate();
+  var p = currentPirate;
+  if(p){
+    var pct = Math.min(p.logged/(p.goal||1),1);
+    var rank = sorted.findIndex(function(x){ return x.id===p.id; })+1;
+    document.getElementById('homeTitle').textContent   = p.name;
+    document.getElementById('homeSub').textContent     = p.real+' — '+(p.crew||'');
+    document.getElementById('hBerries').textContent    = (p.bounty||0).toLocaleString();
+    document.getElementById('hBountyNote').textContent = 'total bounty';
+    document.getElementById('hRank').textContent       = rank > 0 ? '#'+rank : '—';
+    document.getElementById('hRankNote').textContent   = 'of '+sorted.length;
+    document.getElementById('hLogged').textContent     = p.logged||0;
+    document.getElementById('hGoalNote').textContent   = 'goal: '+(p.goal||0)+'h';
+    document.getElementById('hStreak').textContent     = p.streak||0;
+    document.getElementById('progPct').textContent     = Math.round(pct*100)+'%';
+    document.getElementById('progBar').style.width     = Math.round(pct*100)+'%';
+    document.getElementById('progTitle').textContent   = p.name+"'s weekly goal";
+    document.getElementById('progSub').textContent     = (p.logged||0)+'h of '+(p.goal||0)+'h';
+  } else {
+    document.getElementById('homeTitle').textContent = 'Dashboard';
+    document.getElementById('homeSub').textContent   = 'Grand Line Tournament';
+    ['hBerries','hRank','hLogged','hStreak'].forEach(function(id){ document.getElementById(id).textContent='—'; });
+    document.getElementById('progSub').textContent   = 'Login matches no pirate yet. Contact JINX.';
+    document.getElementById('progPct').textContent   = '—';
+  }
+  var cm = {};
+  (w.pirates||[]).forEach(function(px){
+    if(!cm[px.crew]) cm[px.crew]={total:0,n:0,init:CREW_ICONS[px.crew]||(px.crew||'??').slice(0,2).toUpperCase()};
+    cm[px.crew].total+=score(px); cm[px.crew].n++;
+  });
+  var tc = Object.entries(cm).sort(function(a,b){ return b[1].total-a[1].total; }).slice(0,3);
+  document.getElementById('homeTopCrews').innerHTML = tc.length ? tc.map(function(e,i){
+    var name=e[0],d=e[1];
+    return '<div class="list-item" style="cursor:default">'
+      +'<div class="list-rank '+(i===0?'top':'')+'">'+['1','2','3'][i]+'</div>'
+      +'<div class="list-avatar '+(i===0?'me':'')+'">'+esc(d.init)+'</div>'
+      +'<div class="list-info"><div class="list-name">'+esc(name)+'</div><div class="list-sub">'+d.n+' members</div></div>'
+      +'<div class="list-right"><div class="list-val">'+d.total.toLocaleString()+'</div><div class="list-val-sub">berries</div></div>'
+      +'</div>';
+  }).join('') : '<div class="empty"><div class="empty-title">No data yet</div></div>';
+}
+
+// ── MEMBERS ──
+function renderMembers(){
+  var w = state.weeks[viewingWeek];
+  var pirates = (w.pirates||[]).slice();
+  var q = memberSearch.toLowerCase();
+  if(q) pirates = pirates.filter(function(p){
+    return p.name.toLowerCase().includes(q)||p.real.toLowerCase().includes(q)||(p.crew||'').toLowerCase().includes(q);
+  });
+  if(memberSort==='berries') pirates.sort(function(a,b){ return score(b)-score(a); });
+  else if(memberSort==='pct') pirates.sort(function(a,b){ return (b.logged/(b.goal||1))-(a.logged/(a.goal||1)); });
+  else pirates.sort(function(a,b){ return (b.streak||0)-(a.streak||0); });
+  var allSorted = (w.pirates||[]).slice().sort(function(a,b){ return score(b)-score(a); });
+  document.getElementById('memberCount').textContent = pirates.length+' Pirates';
+  document.getElementById('memberList').innerHTML = pirates.length ? pirates.map(function(p){
+    var pct  = Math.min(p.logged/(p.goal||1),1);
+    var rank = allSorted.findIndex(function(x){ return x.id===p.id; })+1;
+    var isMe = currentPirate && p.id===currentPirate.id;
+    var bar  = pct>=1?'done':pct>=0.5?'mid':'low';
+    var init = p.name.slice(0,2).toUpperCase();
+    var avatarContent = p.photoURL
+      ? '<img src="'+esc(p.photoURL)+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%" referrerpolicy="no-referrer">'
+      : esc(init);
+    return '<div class="list-item" onclick="openMemberModal('+p.id+')">'
+      +'<div class="list-rank '+(rank<=3?'top':'')+'">'+rank+'</div>'
+      +'<div class="list-avatar '+(isMe?'me':'')+'">'+avatarContent+'</div>'
+      +'<div class="list-info"><div class="list-name">'+esc(p.name)+(isMe?' <span style="font-size:10px;color:var(--mid)">(you)</span>':'')+'</div>'
+        +'<div class="list-sub">'+esc(p.real)+' — '+esc(p.crew||'')+'</div>'
+        +'<div class="list-bar-bg"><div class="list-bar '+bar+'" style="width:'+Math.round(pct*100)+'%"></div></div>'
+      +'</div>'
+      +'<div class="list-right"><div class="list-val">'+((p.bounty||0).toLocaleString())+'</div>'
+        +'<div class="list-val-sub">'+Math.round(pct*100)+'% / '+(p.logged||0)+'h</div>'
+      +'</div></div>';
+  }).join('') : '<div class="empty"><div class="empty-title">No pirates found</div></div>';
+}
+
+function filterMembers(){ memberSearch = document.getElementById('memberSearch').value; renderMembers(); }
+
+function toggleSort(){
+  var modes  = ['berries','pct','streak'];
+  var labels = {berries:'Sort: Berries',pct:'Sort: Goal %',streak:'Sort: Streak'};
+  memberSort = modes[(modes.indexOf(memberSort)+1)%modes.length];
+  document.getElementById('sortBtn').textContent = labels[memberSort];
+  renderMembers();
+}
+
+// ── MEMBER MODAL ──
+var _memberProfilePrevScreen = 'members';
+
+function memberProfileGoBack(){
+  goTo(_memberProfilePrevScreen);
+}
+
+function openMemberProfile(id, fromScreen){
+  _memberProfilePrevScreen = fromScreen || 'members';
+  // Fix 5: always show active week data on profiles, not the week being browsed
+  var w = state.weeks[state.activeWeek];
+  var p = (w.pirates||[]).find(function(x){ return x.id===id; });
+  // fallback: search all weeks if not in active week
+  if(!p){
+    for(var wi=0;wi<state.weeks.length;wi++){
+      p = (state.weeks[wi].pirates||[]).find(function(x){ return x.id===id; });
+      if(p) break;
+    }
+  }
+  if(!p) return;
+
+  // Switch screen first
+  Object.keys(SCREENS).forEach(function(k){
+    document.getElementById(SCREENS[k]).classList.toggle('active', k==='memberProfile');
+  });
+
+  var pct   = Math.min(p.logged/(p.goal||1),1);
+  var fruit = getFruit(p.fruit);
+  var init  = (p.name||'?').slice(0,2).toUpperCase();
+  var photo = p.photoURL||'';
+
+  // Avatar
+  var avEl = document.getElementById('mpAvatar');
+  avEl.innerHTML = photo
+    ? '<img src="'+esc(photo)+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%" referrerpolicy="no-referrer">'
+    : init;
+
+  document.getElementById('mpTitle').textContent   = p.name;
+  document.getElementById('mpName').textContent    = p.name;
+  document.getElementById('mpSub').textContent     = (p.real||'') + (p.crew ? '  ·  '+p.crew : '');
+  document.getElementById('mpBerries').textContent = (p.bounty||0).toLocaleString();
+  document.getElementById('mpGoal').textContent    = Math.round(pct*100)+'%';
+  document.getElementById('mpStreak').textContent  = p.streak||0;
+  document.getElementById('mpProgPct').textContent = Math.round(pct*100)+'%';
+  document.getElementById('mpProgBar').style.width = Math.round(pct*100)+'%';
+  document.getElementById('mpProgTitle').textContent = p.name+"'s weekly goal";
+  document.getElementById('mpProgSub').textContent = (p.logged||0)+'h of '+(p.goal||0)+'h';
+
+  // Fruit
+  var fruitWrap = document.getElementById('mpFruitWrap');
+  if(fruit){
+    fruitWrap.style.display = 'block';
+    document.getElementById('mpFruitName').textContent   = fruit.name;
+    document.getElementById('mpFruitEffect').textContent = fruit.effect;
+  } else { fruitWrap.style.display = 'none'; }
+
+  // Build daily study history
+  var histEl = document.getElementById('mpHistoryList');
+  if(histEl) histEl.innerHTML = buildDailyHistory(p._history||[]);
+  var habitsEl = document.getElementById('mpHabitsList');
+  var habitsLbl = document.getElementById('mpHabitsLbl');
+  var uid = p.uid||'';
+  if(uid && db){
+    habitsEl.innerHTML = '<div style="font-size:13px;color:var(--mid);padding:20px 0;text-align:center">Loading habits...</div>';
+    db.ref('habits/'+uid).once('value').then(function(snap){
+      var data = snap.val()||{};
+      var habits = Object.values(data);
+      if(!habits.length){
+        habitsLbl.textContent = 'Habits';
+        habitsEl.innerHTML = '<div style="font-size:13px;color:var(--mid);padding:16px 0;text-align:center">No public habits yet.</div>';
+        return;
+      }
+      habitsLbl.textContent = 'Habits ('+habits.length+')';
+      habitsEl.innerHTML = habits.map(function(h){
+        return renderPublicHabitCard(h);
+      }).join('');
+    }).catch(function(){ habitsEl.innerHTML='<div style="font-size:13px;color:var(--mid);padding:16px 0;text-align:center">Could not load habits.</div>'; });
+  } else {
+    habitsLbl.textContent = 'Habits';
+    habitsEl.innerHTML = '<div style="font-size:13px;color:var(--mid);padding:16px 0;text-align:center">No habits linked yet.</div>';
+  }
+}
+
+function buildDailyHistory(history){
+  if(!history||!history.length) return '<div style="font-size:13px;color:var(--mid);padding:16px 0;text-align:center">No study sessions yet this week.</div>';
+
+  // Fix 6: only show last 7 days
+  var cutoff = new Date(); cutoff.setDate(cutoff.getDate()-6); cutoff.setHours(0,0,0,0);
+  var cutoffKey = dateStr(cutoff);
+
+  var byDay = {};
+  var order = [];
+  history.forEach(function(e){
+    var day = e.dateStr || 'Unknown';
+    if(day < cutoffKey) return;
+    if(!byDay[day]){ byDay[day]={hrs:0,berries:0}; order.push(day); }
+    byDay[day].hrs     = Math.round((byDay[day].hrs + (e.hrs||0))*10)/10;
+    byDay[day].berries += (e.berriesChange||0);
+  });
+
+  if(!order.length) return '<div style="font-size:13px;color:var(--mid);padding:16px 0;text-align:center">No study sessions yet this week.</div>';
+  order.sort(function(a,b){ return b.localeCompare(a); });
+
+  var today = todayKey();
+  var DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  return order.map(function(day){
+    var d   = byDay[day];
+    var isT = day === today;
+    var dt  = new Date(day+'T00:00:00');
+    var dow = isNaN(dt.getTime()) ? '—' : (isT ? 'Today' : DOW[dt.getDay()]);
+    var mdy = isNaN(dt.getTime()) ? '' : (MON[dt.getMonth()]+' '+dt.getDate());
+    var bar = Math.min(d.hrs / 8 * 100, 100);
+    return '<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">'
+      +'<div style="flex-shrink:0;width:36px;text-align:center">'
+        +'<div style="font-size:11px;font-weight:700;color:'+(isT?'var(--accent)':'var(--white)')+'">'+dow+'</div>'
+        +(mdy?'<div style="font-size:9px;color:var(--mid);margin-top:1px;white-space:nowrap">'+mdy+'</div>':'')
+      +'</div>'
+      +'<div style="flex:1;min-width:0">'
+        +'<div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:5px">'
+          +'<div style="font-size:13px;font-weight:600;color:var(--white)">'+d.hrs+'h</div>'
+          +(d.berries>0?'<div style="font-size:10px;color:var(--green);font-weight:600;flex-shrink:0;padding-left:6px">+'+d.berries+' B</div>':'')
+        +'</div>'
+        +'<div style="height:4px;background:var(--gray);border-radius:2px;overflow:hidden">'
+          +'<div style="height:100%;width:'+bar+'%;background:'+(isT?'var(--accent)':'rgba(108,92,231,.5)')+';border-radius:2px;transition:width .6s ease"></div>'
+        +'</div>'
+      +'</div>'
+    +'</div>';
+  }).join('');
+}
+
+function renderPublicHabitCard(h){
+  var completions = h.completions||{};
+  var now = new Date();
+  var days=[];
+  for(var i=6;i>=0;i--){ var d=new Date(now); d.setDate(now.getDate()-i); days.push({ds:dateStr(d),lbl:['Su','Mo','Tu','We','Th','Fr','Sa'][d.getDay()],isToday:i===0}); }
+  // mini grid 28 days
+  var gridCells='';
+  for(var gi=27;gi>=0;gi--){
+    var gd=new Date(now); gd.setDate(now.getDate()-gi);
+    var done=!!completions[dateStr(gd)];
+    var bg=done?'background:'+h.color+';opacity:.9':'';
+    gridCells+='<div class="hcg-cell" style="'+bg+'"></div>';
+  }
+  var chipsHtml=days.map(function(d){
+    var done=!!completions[d.ds];
+    return '<div class="habit-chip '+(done?'done':'empty')+(d.isToday?' today-ring':'')+'" style="'+(done?'background:'+h.color:'')+';cursor:default">'+d.lbl+'</div>';
+  }).join('');
+  var freqLabel=h.freq==='daily'?'Everyday':h.freq+'× per week';
+  return '<div class="habit-card">'
+    +'<div class="habit-card-mini-grid">'+gridCells+'</div>'
+    +'<div class="habit-card-right">'
+      +'<div class="habit-card-top"><div><div class="habit-card-name">'+esc(h.name)+'</div><div style="font-size:11px;color:var(--mid);margin-top:1px">'+esc(freqLabel)+'</div></div></div>'
+      +'<div class="habit-day-chips">'+chipsHtml+'</div>'
+    +'</div>'
+  +'</div>';
+}
+
+// Legacy alias kept for any old references
+function openMemberModal(id){ openMemberProfile(id, 'members'); }
+
+// ── PROFILE ──
+function renderProfile(){
+  if(!currentUser) return;
+  updateAvatars();
+  matchPirate();
+  var p = currentPirate;
+  var notLinked = document.getElementById('notLinkedMsg');
+  var logWrap   = document.getElementById('logCardWrap');
+  // Show/hide admin card
+  var adminCard = document.getElementById('profileAdminCard');
+  if(adminCard) adminCard.style.display = isAdmin() ? 'block' : 'none';
+  // Load custom display name into edit field
+  var customName = localStorage.getItem('glt_customDisplayName')||'';
+  var dnField = document.getElementById('editDisplayName');
+  if(dnField) dnField.value = customName;
+  if(p){
+    notLinked.style.display = 'none'; logWrap.style.display = 'block';
+    var pct = Math.min(p.logged/(p.goal||1),1);
+    document.getElementById('profileName').textContent = p.name;
+    document.getElementById('profileReal').textContent = p.real;
+    document.getElementById('profileCrew').textContent = p.crew||'';
+    document.getElementById('pBerries').textContent    = (p.bounty||0).toLocaleString();
+    document.getElementById('pPct').textContent        = Math.round(pct*100)+'%';
+    document.getElementById('pStreak').textContent     = p.streak||0;
+    document.getElementById('editGoal').value = p.goal||'';
+    document.getElementById('editName').value = p.name||'';
+    // Show fruit ability
+    var fruitEl = document.getElementById('fruitInfoCard');
+    var fruit   = getFruit(p.fruit);
+    if(fruitEl && fruit){
+      fruitEl.style.display = 'block';
+      document.getElementById('fruitInfoName').textContent   = fruit.name;
+      document.getElementById('fruitInfoWhen').textContent   = fruit.when.toUpperCase();
+      document.getElementById('fruitInfoEffect').textContent = fruit.effect;
+    } else if(fruitEl){ fruitEl.style.display='none'; }
+    // Show daily study history
+    var myHistEl = document.getElementById('myHistoryList');
+    if(myHistEl) myHistEl.innerHTML = buildDailyHistory(p._history||[]);
+  } else {
+    notLinked.style.display = 'block'; logWrap.style.display = 'none';
+    buildFruitPicker();
+    document.getElementById('profileName').textContent = getDisplayName();
+    document.getElementById('profileReal').textContent = 'Signed in via Google';
+    document.getElementById('profileCrew').textContent = 'Not linked to a pirate';
+    ['pBerries','pPct','pStreak'].forEach(function(id){ document.getElementById(id).textContent='—'; });
+  }
+}
+
+// ── LOG HOURS ──
+function changeHrs(d){
+  logHrsVal = Math.max(0.5, Math.round((logHrsVal+d)*2)/2);
+  document.getElementById('logHrsDisplay').textContent = logHrsVal.toFixed(1);
+}
+
+function submitLog(){
+  if(!currentPirate){ toast('Not linked to a pirate. Contact JINX.'); return; }
+  var w = state.weeks[state.activeWeek];
+  if(w.locked){ toast('This week is locked!'); return; }
+  var p = w.pirates.find(function(x){ return x.id===currentPirate.id; });
+  if(!p){ toast('Pirate not found this week.'); return; }
+  var hrs     = logHrsVal;
+  var note    = document.getElementById('logNote').value.trim();
+  var wasDone = p.logged >= p.goal;
+  var oldPct  = p.logged/(p.goal||1);
+
+  // Streak: increment if first log of the day
+  if(!p._hasLoggedToday){ p.streak = (p.streak||0)+1; }
+
+  // Rumble-Rumble: first session of day counts 1.25x
+  var effectiveHrs = hrs;
+  if(p.fruit==='rumble' && !p._loggedToday){
+    effectiveHrs = Math.round(hrs*1.25*10)/10;
+    toast('Rumble-Rumble: '+hrs+'h boosted to '+effectiveHrs+'h');
+  }
+
+  p.logged = Math.round((p.logged+effectiveHrs)*10)/10;
+  p._loggedToday = true; p._hasLoggedToday = true;
+  var newPct = p.logged/(p.goal||1);
+  var newMs  = Math.floor(Math.min(newPct,1)*10);
+  var oldMs  = Math.floor(Math.min(oldPct,1)*10);
+
+  // Base berries: 50 per 10% milestone + 300 for first goal completion
+  var berries = (newMs-oldMs)*50 + (!wasDone && newPct>=1 ? 300 : 0);
+
+  // Gum-Gum: +40 extra per milestone (50 base + 40 = 90 per milestone, ~400 bonus over full week)
+  if(p.fruit==='gum' && newMs>oldMs){
+    berries += (newMs-oldMs)*40;
+  }
+  // Dark-Dark: +200 at 50%, +200 at 100%
+  if(p.fruit==='dark'){
+    if(oldPct<0.5 && newPct>=0.5){ berries+=200; toast('Dark-Dark: +200 berries at 50%!'); }
+    if(!wasDone && newPct>=1)     { berries+=200; toast('Dark-Dark: +200 berries at 100%!'); }
+  }
+  // Op-Op: when YOU hit 100%, every crewmate gets +100
+  if(p.fruit==='op' && !wasDone && newPct>=1){
+    w.pirates.forEach(function(q){ if(q.id!==p.id){ q.bounty=(q.bounty||0)+100; } });
+    toast('Op-Op ROOM: every crewmate gets +100 berries!');
+  }
+
+  p.bounty = (p.bounty||0)+berries;
+  if(!p._history) p._history=[];
+  p._history.push({type:'add',hrs:effectiveHrs,rawHrs:hrs,note:note,pct:Math.round(newPct*100),berriesChange:berries,dateStr:todayKey(),ts:Date.now()});
+  if(p._history.length > 50) p._history = p._history.slice(-50); // fix 7: cap history
+  document.getElementById('logNote').value='';
+  toast('Logged '+hrs+'h for '+p.name+'  '+Math.round(newPct*100)+'% of goal.');
+  matchPirate(); saveState(); renderAll();
+}
+
+// ── WEEK ADVANCE (with all week-end fruit abilities) ──
+function advanceWeek(){
+  if(state.activeWeek >= TOTAL_WEEKS-1){ toast('Already on the final week!'); return; }
+  var cur     = state.weeks[state.activeWeek];
+  var nextIdx = state.activeWeek+1;
+  var next    = state.weeks[nextIdx];
+  var prevIdx = state.activeWeek-1;
+  var prevPirates = prevIdx >= 0 ? (state.weeks[prevIdx].pirates||[]) : [];
+  var curSorted   = (cur.pirates||[]).slice().sort(function(a,b){ return score(b)-score(a); });
+  var prevSorted  = prevPirates.slice().sort(function(a,b){ return score(b)-score(a); });
+  var top3ids     = curSorted.slice(0,3).map(function(p){ return p.id; });
+  var msgs        = [];
+
+  next.pirates = (cur.pirates||[]).map(function(p){
+    var didGoal = p.logged >= (p.goal||1);
+    var nb = p.bounty||0;
+    var ns = p.streak||0;
+
+    if(didGoal){
+      nb += 300; // base week completion
+      // Flower-Flower: extra +300 on completion
+      if(p.fruit==='flower'){ nb+=300; msgs.push(p.name+' (Flower-Flower): +300 bonus!'); }
+    } else {
+      nb = Math.max(500, nb-150); ns = 0;
+    }
+
+    // Ice-Ice: complete goal + 5-day streak this week = +500
+    var streakGained = (p.streak||0) - (p._streakAtWeekStart||0);
+    if(didGoal && streakGained>=5 && p.fruit==='ice'){
+      nb+=500; msgs.push(p.name+' (Ice-Ice) perfect week: +500!');
+    }
+
+    return Object.assign({}, p, {
+      logged:0, bounty:nb, streak:ns,
+      _maguUsed:false, _hasLoggedToday:false, _loggedToday:false,
+      _history:[], _weekStartBounty:nb, _streakAtWeekStart:ns
+    });
+  });
+
+  cur.locked = true;
+  state.activeWeek = nextIdx;
+  viewingWeek      = nextIdx;
+  if(msgs.length) setTimeout(function(){ toast(msgs[0]); }, 400);
+  saveState(); renderAll();
+  toast('Week '+(nextIdx)+' complete! Week '+(nextIdx+1)+' started.');
+}
+
+// ── TIMER ──
+var timerInterval  = null;
+var timerSeconds   = 0;
+var timerRunning   = false;
+var timerSessions  = []; // [{duration:secs, startedAt:timestamp, logged:bool}]
+var timerTodayTotal = 0; // seconds logged today
+
+function timerToggle(){
+  if(timerRunning){
+    // Pause
+    clearInterval(timerInterval);
+    timerRunning = false;
+    document.getElementById('timerMainBtn').textContent = 'Resume';
+    document.getElementById('timerMainBtn').classList.add('paused');
+    document.getElementById('timerLabel').textContent = 'Paused';
+    document.getElementById('timerDisplay').className = 'timer-display paused';
+  } else {
+    // Start / Resume
+    var startTs = Date.now() - timerSeconds*1000;
+    timerRunning = true;
+    // Show control bar, hide start button
+    document.getElementById('timerStartBtn').style.display = 'none';
+    document.getElementById('timerCtrlBar').style.display  = 'flex';
+    document.getElementById('timerMainBtn').textContent = 'Pause';
+    document.getElementById('timerMainBtn').classList.remove('paused');
+    document.getElementById('timerLabel').textContent = 'Studying...';
+    document.getElementById('timerDisplay').className = 'timer-display running';
+    timerInterval = setInterval(function(){
+      timerSeconds = Math.floor((Date.now()-startTs)/1000);
+      timerUpdateDisplay();
+    }, 500);
+  }
+}
+
+function timerLap(){
+  if(timerSeconds < 1) return;
+  timerSessions.unshift({duration:timerSeconds, startedAt:Date.now(), logged:false});
+  timerTodayTotal += timerSeconds;
+  timerSeconds = 0;
+  clearInterval(timerInterval);
+  timerRunning = false;
+  document.getElementById('timerMainBtn').textContent = 'Resume';
+  document.getElementById('timerMainBtn').classList.add('paused');
+  document.getElementById('timerLabel').textContent = 'Session saved';
+  document.getElementById('timerDisplay').className = 'timer-display';
+  var ringEl = document.getElementById('timerRingFill');
+  if(ringEl){ ringEl.style.strokeDashoffset = '691'; ringEl.className = 'timer-ring-fill'; }
+  timerRenderSessions();
+  timerUpdateDisplay();
+}
+
+function timerReset(){
+  clearInterval(timerInterval);
+  timerRunning = false; timerSeconds = 0;
+  // Restore start button, hide control bar
+  document.getElementById('timerStartBtn').style.display = 'flex';
+  document.getElementById('timerCtrlBar').style.display  = 'none';
+  document.getElementById('timerLabel').textContent = 'Ready to study';
+  document.getElementById('timerDisplay').className = 'timer-display';
+  document.getElementById('timerDisplay').textContent = '00:00:00';
+  var ringEl = document.getElementById('timerRingFill');
+  if(ringEl){ ringEl.style.strokeDashoffset = '691'; ringEl.className = 'timer-ring-fill'; }
+}
+
+function timerUpdateDisplay(){
+  var h = Math.floor(timerSeconds/3600);
+  var m = Math.floor((timerSeconds%3600)/60);
+  var s = timerSeconds%60;
+  document.getElementById('timerDisplay').textContent =
+    (h<10?'0':'')+h+':'+(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  // Animate ring: one full revolution every 60 seconds
+  var ringEl = document.getElementById('timerRingFill');
+  if(ringEl){
+    var circumference = 691;
+    var progress = (timerSeconds % 60) / 60;
+    var offset = circumference - (progress * circumference);
+    ringEl.style.strokeDashoffset = offset;
+    ringEl.className = 'timer-ring-fill' + (timerRunning ? ' running' : ' paused');
+  }
+}
+
+function timerFmt(secs){
+  var h=Math.floor(secs/3600), m=Math.floor((secs%3600)/60), s=secs%60;
+  if(h>0) return h+'h '+m+'m';
+  if(m>0) return m+'m '+s+'s';
+  return s+'s';
+}
+
+function timerRenderSessions(){
+  var el = document.getElementById('timerSessions');
+  var hdr = document.getElementById('timerSessionsHeader');
+  var totalBar = document.getElementById('timerTotalBar');
+  var totalVal = document.getElementById('timerTotalVal');
+  if(!timerSessions.length){ el.innerHTML=''; hdr.style.display='none'; totalBar.style.display='none'; return; }
+  hdr.style.display='flex'; totalBar.style.display='flex';
+  var totalSecs = timerSessions.reduce(function(a,s){ return a+s.duration; },0);
+  var th=Math.floor(totalSecs/3600), tm=Math.floor((totalSecs%3600)/60);
+  totalVal.textContent = (th>0?th+'h ':'')+tm+'m';
+  el.innerHTML = timerSessions.map(function(s,i){
+    var t=new Date(s.startedAt);
+    var timeStr = t.getHours()+':'+(t.getMinutes()<10?'0':'')+t.getMinutes();
+    return '<div class="session-item">'
+      +'<div class="session-dot"></div>'
+      +'<div class="session-info"><div class="session-dur">'+timerFmt(s.duration)+'</div>'
+        +'<div class="session-time">'+timeStr+'</div></div>'
+      +(s.logged
+        ? '<span style="font-size:11px;color:var(--mid)">Logged</span>'
+        : '<button class="session-log-btn" onclick="timerLogSession('+i+')">Log this</button>')
+    +'</div>';
+  }).join('');
+}
+
+function timerLogSession(idx){
+  var s = timerSessions[idx];
+  if(!s || s.logged) return;
+  if(!currentPirate){ toast('Not linked to a pirate.'); return; }
+  var hrs = Math.round(s.duration/3600*10)/10;
+  if(hrs < 0.1) hrs = 0.1;
+  // Reuse submitLog logic inline
+  var w = state.weeks[state.activeWeek];
+  if(w.locked){ toast('Week is locked!'); return; }
+  var p = w.pirates.find(function(x){ return x.id===currentPirate.id; });
+  if(!p){ toast('Pirate not found.'); return; }
+  var wasDone=p.logged>=p.goal, oldPct=p.logged/(p.goal||1);
+  if(!p._hasLoggedToday){ p.streak=(p.streak||0)+1; }
+  var effectiveHrs=hrs;
+  if(p.fruit==='rumble'&&!p._loggedToday){ effectiveHrs=Math.round(hrs*1.25*10)/10; }
+  p.logged=Math.round((p.logged+effectiveHrs)*10)/10;
+  p._loggedToday=true; p._hasLoggedToday=true;
+  var newPct=p.logged/(p.goal||1);
+  var newMs=Math.floor(Math.min(newPct,1)*10), oldMs=Math.floor(Math.min(oldPct,1)*10);
+  var berries=(newMs-oldMs)*50+(!wasDone&&newPct>=1?300:0);
+  if(p.fruit==='gum'&&newMs>oldMs){ berries+=(newMs-oldMs)*50; }
+  if(p.fruit==='dark'){if(oldPct<0.5&&newPct>=0.5){berries+=300;}if(!wasDone&&newPct>=1){berries+=300;}}
+  if(p.fruit==='op'&&!wasDone&&newPct>=1){w.pirates.forEach(function(q){if(q.id!==p.id)q.bounty=(q.bounty||0)+150;});}
+  p.bounty=(p.bounty||0)+berries;
+  if(!p._history)p._history=[];
+  p._history.push({type:'add',hrs:effectiveHrs,rawHrs:hrs,note:'Timer session',pct:Math.round(newPct*100),berriesChange:berries,dateStr:todayKey(),ts:Date.now()});
+  if(p._history.length > 50) p._history = p._history.slice(-50);
+  timerSessions[idx].logged=true;
+  toast('Logged '+hrs+'h! '+Math.round(newPct*100)+'% of goal.');
+  matchPirate(); saveState(); renderAll(); timerRenderSessions();
+}
+
+function renderTimer(){
+  updateAvatars();
+  timerRenderSessions();
+}
+
+var manualHrsVal = 1.0;
+function manualHrsChange(d){
+  manualHrsVal = Math.max(0.5, Math.round((manualHrsVal+d)*2)/2);
+  document.getElementById('manualHrsDisplay').textContent = manualHrsVal.toFixed(1);
+}
+
+function submitManualLog(){
+  if(!currentPirate){ toast('Not linked to a pirate yet.'); return; }
+  var w = state.weeks[state.activeWeek];
+  if(w.locked){ toast('This week is locked!'); return; }
+  var p = w.pirates.find(function(x){ return x.id===currentPirate.id; });
+  if(!p){ toast('Pirate not found.'); return; }
+  var hrs     = manualHrsVal;
+  var wasDone = p.logged >= p.goal;
+  var oldPct  = p.logged/(p.goal||1);
+  if(!p._hasLoggedToday){ p.streak=(p.streak||0)+1; }
+  var effectiveHrs = hrs;
+  if(p.fruit==='rumble'&&!p._loggedToday){ effectiveHrs=Math.round(hrs*1.25*10)/10; toast('Rumble-Rumble: '+hrs+'h → '+effectiveHrs+'h!'); }
+  p.logged=Math.round((p.logged+effectiveHrs)*10)/10;
+  p._loggedToday=true; p._hasLoggedToday=true;
+  var newPct=p.logged/(p.goal||1);
+  var newMs=Math.floor(Math.min(newPct,1)*10), oldMs=Math.floor(Math.min(oldPct,1)*10);
+  var berries=(newMs-oldMs)*50+(!wasDone&&newPct>=1?300:0);
+  if(p.fruit==='gum'&&newMs>oldMs){ berries+=(newMs-oldMs)*50; }
+  if(p.fruit==='dark'){if(oldPct<0.5&&newPct>=0.5){berries+=300;}if(!wasDone&&newPct>=1){berries+=300;}}
+  if(p.fruit==='op'&&!wasDone&&newPct>=1){w.pirates.forEach(function(q){if(q.id!==p.id)q.bounty=(q.bounty||0)+150;});}
+  p.bounty=(p.bounty||0)+berries;
+  if(!p._history)p._history=[];
+  p._history.push({type:'add',hrs:effectiveHrs,rawHrs:hrs,note:'Manual entry',pct:Math.round(newPct*100),berriesChange:berries,dateStr:todayKey(),ts:Date.now()});
+  if(p._history.length > 50) p._history = p._history.slice(-50);
+  toast('Added '+hrs+'h manually! Now at '+Math.round(newPct*100)+'% of goal.'+(berries?' +'+berries+' berries!':''));
+  matchPirate(); saveState(); renderAll();
+}
+
+// ── CHAT ──
+var chatRef = null;
+var chatListening = false;
+
+function cleanOldChats(){
+  if(!chatRef) return;
+  var twoDaysAgo = Date.now() - (2 * 24 * 60 * 60 * 1000);
+  chatRef.orderByChild('ts').endAt(twoDaysAgo).once('value', function(snap){
+    var updates = {};
+    snap.forEach(function(child){
+      updates[child.key] = null; // mark for deletion
+    });
+    if(Object.keys(updates).length > 0){
+      chatRef.update(updates).then(function(){
+        console.log('Cleaned ' + Object.keys(updates).length + ' old chat messages (older than 2 days)');
+      }).catch(function(e){
+        console.error('Chat cleanup error:', e);
+      });
+    }
+  });
+}
+
+function initChat(){
+  if(!db || chatListening) return;
+  chatRef = db.ref('chat');
+  chatListening = true;
+  // Clean up messages older than 2 days
+  cleanOldChats();
+  chatRef.limitToLast(80).on('value', function(snap){
+    var msgs = [];
+    snap.forEach(function(child){ msgs.push(child.val()); });
+    renderChatMessages(msgs);
+  });
+}
+
+function renderChat(){
+  updateAvatars();
+  initChat();
+}
+
+function renderChatMessages(msgs){
+  var el    = document.getElementById('chatMessages');
+  var empty = document.getElementById('chatEmpty');
+  if(!msgs.length){
+    if(empty) empty.style.display='flex';
+    // Clear any old messages but keep the empty placeholder
+    var old = el.querySelectorAll('.chat-msg,.chat-date-sep');
+    old.forEach(function(n){ n.remove(); });
+    return;
+  }
+  if(empty) empty.style.display='none';
+  var myKey = currentUser ? currentUser.key : null;
+  var html = '';
+  var lastDate = '';
+  msgs.forEach(function(m){
+    var d = new Date(m.ts||0);
+    var msgDateStr = d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
+    if(msgDateStr !== lastDate){
+      html += '<div class="chat-date-sep">'+msgDateStr+'</div>';
+      lastDate = msgDateStr;
+    }
+    var isMine = m.senderKey === myKey;
+    var timeStr = d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes();
+    html += '<div class="chat-msg '+(isMine?'mine':'theirs')+'">'
+      +'<div class="chat-msg-sender">'+esc(m.senderName||'?')+'</div>'
+      +esc(m.text)
+      +'<div class="chat-msg-time">'+timeStr+'</div>'
+    +'</div>';
+  });
+  // Replace only message nodes, preserve empty div
+  var frag = document.createElement('div');
+  frag.innerHTML = html;
+  var old2 = el.querySelectorAll('.chat-msg,.chat-date-sep');
+  old2.forEach(function(n){ n.remove(); });
+  while(frag.firstChild) el.appendChild(frag.firstChild);
+  el.scrollTop = el.scrollHeight;
+}
+
+function sendChatMessage(){
+  var input = document.getElementById('chatInput');
+  var text  = input.value.trim();
+  if(!text) return;
+  if(!currentUser){ toast('Sign in to chat.'); return; }
+  if(!chatRef){ initChat(); if(!chatRef){ toast('Chat unavailable.'); return; } }
+  var msg = {
+    senderKey:  currentUser.key,
+    senderName: getDisplayName(),
+    text: text,
+    ts: Date.now()
+  };
+  chatRef.push(msg).catch(function(e){ toast('Could not send: '+e.message); });
+  input.value = '';
+  input.style.height = 'auto';
+}
+
+function chatKeydown(e){
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendChatMessage(); }
+}
+function chatAutoResize(el){
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,100)+'px';
+}
+
+// ── CREATE PLAYER ──
+function createPlayer(){
+  if(!currentUser){ toast('Sign in with Google to create a pirate.'); return; }
+  var name = document.getElementById('cpName').value.trim();
+  var real = document.getElementById('cpReal').value.trim();
+  var crew = document.getElementById('cpCrew').value;
+  var goal = parseFloat(document.getElementById('cpGoal').value);
+  if(!name){ toast('Enter a pirate name.'); return; }
+  if(!real){ toast('Enter your real name.'); return; }
+  if(!goal || goal < 1){ toast('Enter a valid weekly goal.'); return; }
+  if(!selectedFruit){ toast('Choose a devil fruit ability.'); return; }
+  // Ban check — by UID (primary) or by name fallback
+  var uidKey  = currentUser.uid||'';
+  var nameKey = 'name_'+real.toLowerCase().replace(/\s/g,'');
+  if(db){
+    // Check both UID-based and name-based ban entries
+    Promise.all([
+      uidKey  ? db.ref('banned/'+uidKey).once('value')  : Promise.resolve(null),
+      db.ref('banned/'+nameKey+'_'+Date.now()).once('value') // won't match, just structure
+    ]).then(function(snaps){
+      // Simpler: just check the UID key
+      db.ref('banned/'+uidKey).once('value').then(function(snap){
+        if(snap && snap.val()){ toast('This account is banned. Contact the admin.'); return; }
+        _doCreatePlayer(name, real, crew, goal);
+      });
+    }).catch(function(){ _doCreatePlayer(name, real, crew, goal); });
+  } else {
+    _doCreatePlayer(name, real, crew, goal);
+  }
+}
+function _doCreatePlayer(name, real, crew, goal){
+  var w = state.weeks[state.activeWeek];
+  // Check name uniqueness
+  var nameTaken = w.pirates.find(function(p){
+    return p.name.toLowerCase().trim() === name.toLowerCase();
+  });
+  if(nameTaken){ toast('Pirate name "'+name+'" is already taken! Choose a unique name.'); return; }
+  // Check not already in
+  var existing = w.pirates.find(function(p){
+    return p.real.toLowerCase().replace(/\s/g,'') === currentUser.key ||
+           p.name.toLowerCase().replace(/\s/g,'') === currentUser.key;
+  });
+  if(existing){ toast('You already have a pirate this week!'); return; }
+  var newPirate = {
+    id: Date.now(), name: name, real: real, crew: crew,
+    goal: goal, logged: 0, streak: 0, bounty: 1000, fruit: selectedFruit,
+    uid: currentUser.uid||'',
+    photoURL: currentUser.photoURL||'',
+    _weekStartBounty: 1000, _streakAtWeekStart: 0,
+    _hasLoggedToday: false, _loggedToday: false,
+    _lastLogDate: todayKey(), _history: []
+  };
+  w.pirates.push(newPirate);
+  localStorage.setItem('glt_myPirateId', String(newPirate.id));
+  toast('Welcome to the Grand Line, '+name+'!');
+  saveState();
+  matchPirate();
+  renderAll();
+}
+
+// ── CONFIRM ADVANCE WEEK ──
+function confirmAdvanceWeek(){
+  var cur = state.weeks[state.activeWeek];
+  if(!cur || !cur.pirates || !cur.pirates.length){ toast('No pirates in current week.'); return; }
+  if(state.activeWeek >= TOTAL_WEEKS-1){ toast('Already on the final week!'); return; }
+  if(!confirm('Close Week '+(state.activeWeek+1)+' and start Week '+(state.activeWeek+2)+'?\n\nHours reset. Bounties and streaks carry over. Week-end fruit abilities will fire.')) return;
+  advanceWeek();
+}
+
+// ── SAVE PROFILE ──
+function saveProfile(){
+  // Save custom display name (works even if not linked to pirate)
+  var customDn = document.getElementById('editDisplayName') ? document.getElementById('editDisplayName').value.trim() : '';
+  localStorage.setItem('glt_customDisplayName', customDn);
+
+  if(!currentPirate){ toast('Display name saved!'); updateAvatars(); return; }
+  var w = state.weeks[state.activeWeek];
+  var p = w.pirates.find(function(x){ return x.id===currentPirate.id; });
+  if(!p){ toast('Pirate not found.'); return; }
+  var g = parseFloat(document.getElementById('editGoal').value);
+  var n = document.getElementById('editName').value.trim();
+  if(n && n.toLowerCase() !== p.name.toLowerCase()){
+    var nameTaken = w.pirates.find(function(q){
+      return q.id !== p.id && q.name.toLowerCase().trim() === n.toLowerCase();
+    });
+    if(nameTaken){ toast('Pirate name "'+n+'" is already taken!'); return; }
+    p.name = n;
+  }
+  if(g>0) p.goal=g;
+  toast('Profile saved!'); matchPirate(); saveState(); renderAll();
+}
+
+// ── FRUITS ──
+function renderFruits(){
+  var w         = state.weeks[state.activeWeek];
+  var pirates   = w.pirates || [];
+  updateAvatars();
+  document.getElementById('fruitsSub').textContent    = currentPirate
+    ? 'Your fruit: '+(getFruit(currentPirate.fruit)||{name:'None'}).name+' — tap any to change'
+    : 'Tap any fruit to equip it (you must be linked to a pirate)';
+
+  var grid = document.getElementById('fruitGrid');
+  if(!grid) return;
+
+  // who holds each fruit
+  var holders = {};
+  pirates.forEach(function(p){ if(p.fruit) holders[p.fruit] = p.name; });
+
+  grid.innerHTML = FRUITS.map(function(f){
+    var isEquipped = currentPirate && currentPirate.fruit === f.id;
+    var holder     = holders[f.id];
+    var whenClass  = f.when === 'per log' ? 'per-log' : 'week-end';
+    var initials   = f.id.slice(0,2).toUpperCase();
+    return '<div class="fruit-card'+(isEquipped?' equipped':'')+'" onclick="equipFruit(\"'+f.id+'\")">'
+      +'<div class="fruit-card-top">'
+        +'<div class="fc-left">'
+          +'<div class="fc-initials">'+initials+'</div>'
+          +'<div><div class="fc-name">'+esc(f.name)+'</div>'
+          +'<div class="fc-type">Devil Fruit</div></div>'
+        +'</div>'
+        +'<div class="fc-right">'
+          +'<div class="fc-when '+whenClass+'">'+f.when+'</div>'
+          +(isEquipped ? '<div class="fc-equipped-badge">Equipped</div>' : '')
+        +'</div>'
+      +'</div>'
+      +'<div class="fc-effect">'+esc(f.effect)+'</div>'
+      +(holder && !isEquipped ? '<div class="fc-holder">Held by: '+esc(holder)+'</div>' : '')
+    +'</div>';
+  }).join('');
+}
+
+function equipFruit(fruitId){
+  if(!currentPirate){ toast('Not linked to a pirate. Contact JINX.'); return; }
+  var w = state.weeks[state.activeWeek];
+  if(w.locked){ toast('Week is locked — cannot change fruit.'); return; }
+  var p = w.pirates.find(function(x){ return x.id===currentPirate.id; });
+  if(!p){ toast('Pirate not found.'); return; }
+  var fruit = getFruit(fruitId);
+  if(!fruit) return;
+  if(p.fruit === fruitId){ toast(fruit.name+' is already equipped.'); return; }
+  p.fruit = fruitId;
+  toast('Equipped '+fruit.name+'!');
+  matchPirate();
+  saveState();
+  renderAll();
+}
+
+// ── CREWS ──
+function renderCrews(){
+  var w = state.weeks[viewingWeek];
+  document.getElementById('crewsSub').textContent = ARC_NAMES[viewingWeek]||'Grand Line';
+  var cm = {};
+  (w.pirates||[]).forEach(function(p){
+    if(!cm[p.crew]) cm[p.crew]={members:[],total:0,totalPct:0,goalsHit:0,init:CREW_ICONS[p.crew]||(p.crew||'??').slice(0,2).toUpperCase()};
+    var pct=p.logged/(p.goal||1);
+    cm[p.crew].members.push({name:p.name,real:p.real,pct:pct,bounty:p.bounty||0});
+    cm[p.crew].total+=score(p); cm[p.crew].totalPct+=Math.min(pct,1);
+    if(pct>=1) cm[p.crew].goalsHit++;
+  });
+  var sorted = Object.entries(cm).sort(function(a,b){ return b[1].total-a[1].total; });
+  document.getElementById('crewList').innerHTML = sorted.length ? sorted.map(function(e,i){
+    var name=e[0],d=e[1], rank=i+1;
+    var avgPct = d.members.length ? d.totalPct/d.members.length : 0;
+    var barCol = avgPct>=1?'var(--green)':avgPct>=0.5?'var(--orange)':'var(--red)';
+    var isTop  = rank===1;
+    return '<div class="crew-card rank-'+(rank<=3?rank:'x')+'">'
+      +'<div class="crew-top">'
+        +'<div class="crew-rank '+(isTop?'gold':'')+'">'+rank+'</div>'
+        +'<div class="crew-icon-box" style="'+(isTop?'background:var(--black);color:var(--white);border-color:var(--black)':'')+'">'+esc(d.init)+'</div>'
+        +'<div class="crew-info"><div class="crew-name">'+esc(name)+'</div>'
+          +'<div class="crew-meta">'+d.members.length+' members — '+d.goalsHit+' goals hit — '+Math.round(avgPct*100)+'% avg</div>'
+        +'</div>'
+        +'<div class="crew-score"><div class="crew-num">'+d.total.toLocaleString()+'</div><div class="crew-num-lbl">berries</div></div>'
+      +'</div>'
+      +'<div class="crew-bar-wrap"><div class="crew-bar-fill" style="width:'+Math.round(Math.min(avgPct,1)*100)+'%;background:'+barCol+'"></div></div>'
+      +'<div class="crew-members-wrap">'+d.members.sort(function(a,b){return b.bounty-a.bounty;}).map(function(m){
+        return '<span class="member-chip">'+esc(m.real)+' <span class="chip-pct">'+Math.round(m.pct*100)+'%</span></span>';
+      }).join('')+'</div>'
+    +'</div>';
+  }).join('') : '<div class="empty"><div class="empty-title">No crew data yet</div></div>';
+}
+
+// ── WEEK TABS ──
+function renderWeekTabs(){
+  ['weekTabsMembers','weekTabsCrews'].forEach(function(tabId){
+    var el = document.getElementById(tabId); if(!el) return;
+    el.innerHTML='';
+    for(var i=0;i<TOTAL_WEEKS;i++){
+      var w=state.weeks[i], isFuture=i>state.activeWeek;
+      var btn=document.createElement('button');
+      btn.className='wtab'+(i===viewingWeek?' active':'')+(isFuture?' locked':'');
+      btn.textContent=isFuture?'Week '+(i+1)+' (locked)':'Week '+(i+1)+(w.locked?' done':'');
+      if(!isFuture){
+        (function(idx){ btn.addEventListener('click',function(){
+          viewingWeek=idx; renderWeekTabs(); renderMembers(); renderCrews();
+        }); })(i);
+      }
+      el.appendChild(btn);
+    }
+  });
+}
+
+// ── MODAL ──
+function openModal(id){ document.getElementById(id).classList.add('on'); }
+function closeModal(id){ document.getElementById(id).classList.remove('on'); }
+document.querySelectorAll('.modal-overlay').forEach(function(el){
+  el.addEventListener('click',function(e){ if(e.target===el) el.classList.remove('on'); });
+});
+
+// ── TOAST ──
+var _tt;
+function toast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('on');
+  clearTimeout(_tt); _tt=setTimeout(function(){ t.classList.remove('on'); }, 3200);
+}
+
+// ── AUTO LOGIN ──
+(function boot(){
+  // Fast-path: restore session from localStorage while Firebase auth loads
+  var lastKey  = localStorage.getItem('glt_lastUserKey');
+  var lastDisp = localStorage.getItem('glt_lastUserDisplay');
+  var lastUid  = localStorage.getItem('glt_lastUserUid');
+  var lastPhoto= localStorage.getItem('glt_lastUserPhoto');
+  var lastEmail= localStorage.getItem('glt_lastUserEmail')||'';
+  if(lastKey && lastUid){
+    currentUser = {uid:lastUid, displayName:lastDisp||lastKey, email:lastEmail, key:lastKey, photoURL:lastPhoto||''};
+    document.getElementById('loginScreen').classList.remove('active');
+    document.getElementById('homeScreen').classList.add('active');
+    hideSplash();
+    loadFromFirebase();
+    initHabits();
+  }
+
+  if(auth){
+    // Handle redirect sign-in result (used in Android app)
+    auth.getRedirectResult().then(function(result){
+      if(result && result.user){
+        var u = result.user;
+        var key = (u.email ? u.email.split('@')[0] : (u.displayName||'user')).toLowerCase().replace(/[^a-z0-9]/g,'');
+        onLoginSuccess({uid:u.uid, displayName:u.displayName||key, email:u.email||'', key:key, photoURL:u.photoURL||''}, true);
+      }
+    }).catch(function(e){
+      // Ignore no-redirect-result errors (normal when not coming back from redirect)
+      if(e.code !== 'auth/no-auth-event') console.warn('getRedirectResult:', e.code);
+    });
+
+    // Pick up already-signed-in users (page refresh / session restore)
+    auth.onAuthStateChanged(function(u){
+      if(u && !currentUser){
+        var key = (u.email ? u.email.split('@')[0] : (u.displayName || 'user')).toLowerCase().replace(/[^a-z0-9]/g,'');
+        onLoginSuccess({uid:u.uid, displayName:u.displayName||key, email:u.email||'', key:key, photoURL:u.photoURL||''}, false);
+      } else if(!u && currentUser){
+        doLogout();
+      }
+    });
+  }
+})();
+// ══════════════════════════════════════════
+// ── HABITS ──
+// ══════════════════════════════════════════
+var habitsRef = null;
+var userHabits = []; // [{id, name, freq, color, completions:[dateStr]}]
+var habitEditId = null;
+var habitModalFreq = 'daily';
+var habitModalColor = '#6c5ce7';
+var viewingHabitId = null;
+
+var DAY_LABELS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+function dateStr(d){ // 'YYYY-MM-DD'
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function today(){ return dateStr(new Date()); }
+
+function initHabits(){
+  if(!db||!currentUser) return;
+  if(habitsRef) return;
+  habitsRef = db.ref('habits/'+currentUser.uid);
+  habitsRef.on('value',function(snap){
+    var data = snap.val()||{};
+    userHabits = Object.values(data);
+    renderHabits();
+    if(viewingHabitId) renderHabitDetail(viewingHabitId);
+  });
+}
+
+function renderHabits(){
+  updateAvatars();
+  var el = document.getElementById('habitsList'); if(!el) return;
+  var todayDs = today();
+
+  // Update summary stats
+  var totalEl = document.getElementById('habitsTotalCount');
+  var doneEl  = document.getElementById('habitsDoneToday');
+  if(totalEl) totalEl.textContent = userHabits.length;
+  if(doneEl)  doneEl.textContent  = userHabits.filter(function(h){ return !!(h.completions||{})[todayDs]; }).length;
+
+  if(!userHabits.length){
+    el.innerHTML='<div style="text-align:center;padding:32px 0;color:var(--mid);font-size:14px">No habits yet.<br><span style="font-size:12px;opacity:.6">Add one below.</span></div>';
+    return;
+  }
+
+  // 14-day chips window
+  var now = new Date();
+  var days = [];
+  for(var i=13;i>=0;i--){
+    var d = new Date(now); d.setDate(now.getDate()-i);
+    days.push({ds:dateStr(d), lbl:['Su','Mo','Tu','We','Th','Fr','Sa'][d.getDay()], isToday:i===0, dayNum:d.getDate()});
+  }
+
+  el.innerHTML = userHabits.map(function(h){
+    var completions = h.completions||{};
+    var todayVal = completions[todayDs];
+    var intToday = todayVal===true?3:(parseInt(todayVal)||0);
+    var intLabels = ['','Low','Mid','High'];
+    var checkedToday = !!todayVal;
+
+    // ── Mini 8-col grid (4 weeks × 7 days = 28 days) ──
+    var gridCells = '';
+    var intOpacities = {'1':'0.35','2':'0.65','3':'1','true':'1'};
+    for(var gi=27;gi>=0;gi--){
+      var gd=new Date(now); gd.setDate(now.getDate()-gi);
+      var gds=dateStr(gd); var val=completions[gds];
+      var isFut=gd>now;
+      var bg;
+      if(isFut){ bg='background:rgba(255,255,255,0.04)'; }
+      else if(val){ var op=intOpacities[String(val)]||'1'; bg='background:'+h.color+';opacity:'+op; }
+      else { bg=''; }
+      gridCells+='<div class="hcg-cell" style="'+bg+'"></div>';
+    }
+
+    // ── Day chips (square tiles with intensity) ──
+    var chipsHtml = days.map(function(d){
+      var val = completions[d.ds];
+      var intLevel = val===true?3:(parseInt(val)||0);
+      var isEmpty = !intLevel;
+      var opacities = ['','0.35','0.65','1.0'];
+      var cls = 'habit-chip '+(isEmpty?'empty':'int'+intLevel)+(d.isToday?' today-ring':'');
+      var todayId = d.isToday ? 'id="chip-today-'+h.id+'"' : '';
+      return '<div class="'+cls+'" '+todayId+' style="'+(isEmpty?'':'background:'+h.color)+'" '
+        +'onclick="habitChipClick(\''+h.id+'\',\''+d.ds+'\','+intLevel+')">'
+        +'<span class="chip-day">'+d.lbl+'</span>'
+        +'<span style="font-size:8px;opacity:.55;color:'+(isEmpty?'var(--mid)':'#fff')+'">'+d.dayNum+'</span>'
+        +'<span class="chip-dot" style="'+(isEmpty?'display:none':'opacity:'+opacities[Math.max(intLevel,1)])+'"></span>'
+      +'</div>';
+    }).join('');
+
+    var freqLabel = h.freq==='daily'?'Everyday':h.freq+'× per week';
+
+    return '<div class="habit-card">'
+      +'<div class="habit-card-mini-grid" onclick="openHabitDetail(\''+h.id+'\')" style="cursor:pointer">'+gridCells+'</div>'
+      +'<div class="habit-card-right">'
+        +'<div class="habit-card-top">'
+          +'<div style="min-width:0">'
+            +'<div class="habit-card-name">'+esc(h.name)+'</div>'
+            +'<div style="font-size:11px;color:var(--mid);margin-top:1px">'+esc(freqLabel)+'</div>'
+          +'</div>'
+          +'<button class="habit-card-menu" onclick="event.stopPropagation();openHabitModal(\''+h.id+'\')">&#8943;</button>'
+        +'</div>'
+        +'<div class="habit-day-chips">'+chipsHtml+'</div>'
+        +'<button class="habit-checkin-btn'+(checkedToday?' checked':'')+'" style="'+(checkedToday?'':'background:'+h.color)+'" '
+          +'onclick="checkInHabit(\''+h.id+'\')">'
+          +(checkedToday
+            ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>'
+              +'Done — '+intLabels[intToday]+' intensity'
+            : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>'
+              +'Check in'
+          )
+        +'</button>'
+      +'</div>'
+    +'</div>';
+  }).join('');
+  // Scroll today chip into view for each habit
+  setTimeout(function(){
+    userHabits.forEach(function(h){
+      var todayChip = document.getElementById('chip-today-'+h.id);
+      if(todayChip) todayChip.scrollIntoView({behavior:'smooth',block:'nearest',inline:'end'});
+    });
+  }, 60);
+}
+var _intHabitId = null;
+var _intDateStr  = null;
+var _intSelected = 3;
+var _intUnchecking = false;
+
+function habitChipClick(habitId, ds, currentLevel){
+  event.stopPropagation();
+  if(!habitsRef){ initHabits(); if(!habitsRef){ toast('Habits not ready yet.'); return; } }
+  if(currentLevel > 0){
+    var h = userHabits.find(function(x){ return x.id===habitId; });
+    if(!h) return;
+    var completions = h.completions||{};
+    delete completions[ds];
+    h.completions = completions;
+    habitsRef.child(habitId+'/completions').set(completions);
+    renderHabits();
+  } else {
+    openIntensityPopup(habitId, ds);
+  }
+}
+
+function checkInHabit(habitId){
+  if(!habitsRef){ initHabits(); if(!habitsRef){ toast('Habits not ready yet.'); return; } }
+  var h = userHabits.find(function(x){ return x.id===habitId; });
+  if(!h) return;
+  var todayDs = today();
+  var completions = h.completions||{};
+  if(completions[todayDs]){
+    delete completions[todayDs];
+    h.completions = completions;
+    habitsRef.child(habitId+'/completions').set(completions);
+    renderHabits();
+  } else {
+    openIntensityPopup(habitId, todayDs);
+  }
+}
+
+function openIntensityPopup(habitId, ds){
+  _intHabitId = habitId;
+  _intDateStr  = ds;
+  _intSelected = 3;
+  selectIntensity(3);
+  var popup = document.getElementById('intensityPopup');
+  popup.style.display = 'flex';
+  var h = userHabits.find(function(x){ return x.id===habitId; });
+  if(h){
+    document.getElementById('intPopupTitle').textContent = h.name+' — how intense was it?';
+    document.getElementById('intConfirmBtn').style.background = h.color;
+  }
+}
+
+function selectIntensity(level){
+  _intSelected = level;
+  [1,2,3].forEach(function(l){
+    var btn = document.getElementById('intBtn'+l);
+    if(btn) btn.classList.toggle('selected', l===level);
+  });
+}
+
+function confirmIntensity(){
+  if(!_intHabitId || !_intDateStr) return;
+  if(!habitsRef){ toast('Habits not ready yet.'); return; }
+  var h = userHabits.find(function(x){ return x.id===_intHabitId; });
+  if(!h) return;
+  var completions = h.completions||{};
+  completions[_intDateStr] = _intSelected;
+  h.completions = completions;
+  habitsRef.child(_intHabitId+'/completions').set(completions);
+  closeIntensityPopup();
+  renderHabits();
+}
+
+function closeIntensityPopup(){
+  var popup = document.getElementById('intensityPopup');
+  if(popup) popup.style.display = 'none';
+  _intHabitId = null; _intDateStr = null;
+}
+
+// ── HABIT MODAL ──
+function openHabitModal(editId){
+  habitEditId = editId||null;
+  var modal = document.getElementById('habitModal');
+  var titleEl = document.getElementById('habitModalTitle');
+  var saveBtn = document.getElementById('habitSaveBtn');
+  var delBtn  = document.getElementById('habitDeleteBtn');
+  var nameIn  = document.getElementById('habitNameInput');
+  if(editId){
+    var h = userHabits.find(function(x){ return x.id===editId; });
+    if(!h) return;
+    titleEl.textContent = 'Edit Habit';
+    saveBtn.textContent = 'Save Changes';
+    delBtn.style.display = 'block';
+    nameIn.value = h.name;
+    habitModalFreq = h.freq;
+    habitModalColor = h.color;
+  } else {
+    titleEl.textContent = 'New Habit';
+    saveBtn.textContent = 'Create Habit';
+    delBtn.style.display = 'none';
+    nameIn.value = '';
+    habitModalFreq = 'daily';
+    habitModalColor = '#6c5ce7';
+  }
+  // Sync freq buttons
+  document.querySelectorAll('.habit-freq-btn').forEach(function(b){
+    b.classList.toggle('active', b.dataset.val===habitModalFreq);
+  });
+  // Sync color dots
+  document.querySelectorAll('.habit-color-dot').forEach(function(d){
+    d.classList.toggle('active', d.dataset.color===habitModalColor);
+  });
+  openModal('habitModal');
+}
+
+function selectHabitFreq(btn){
+  habitModalFreq = btn.dataset.val;
+  document.querySelectorAll('.habit-freq-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+function selectHabitColor(dot){
+  habitModalColor = dot.dataset.color;
+  document.querySelectorAll('.habit-color-dot').forEach(function(d){ d.classList.remove('active'); });
+  dot.classList.add('active');
+}
+
+function saveHabit(){
+  var name = document.getElementById('habitNameInput').value.trim();
+  if(!name){ toast('Enter a habit name.'); return; }
+  if(!habitsRef) initHabits();
+  if(habitEditId){
+    habitsRef.child(habitEditId).update({name:name, freq:habitModalFreq, color:habitModalColor});
+    toast('Habit updated!');
+  } else {
+    var id = 'h'+Date.now();
+    habitsRef.child(id).set({id:id, name:name, freq:habitModalFreq, color:habitModalColor, completions:{}});
+    toast('Habit added!');
+  }
+  closeModal('habitModal');
+}
+
+function deleteHabit(){
+  if(!habitEditId) return;
+  if(!confirm('Delete this habit? All history will be lost.')) return;
+  habitsRef.child(habitEditId).remove();
+  toast('Habit deleted.');
+  closeModal('habitModal');
+  if(viewingHabitId===habitEditId){ viewingHabitId=null; goTo('habits'); }
+}
+
+// ── HABIT DETAIL ──
+function openHabitDetail(id){
+  viewingHabitId = id;
+  _habitDetailMonth = null; // reset to current month
+  goTo('habitDetail');
+}
+
+var _habitDetailMonth = null; // {year, month} — null = current month
+
+function renderHabitDetail(id){
+  var h = (userHabits||[]).find(function(x){ return x.id===id; });
+  if(!h){ goTo('habits'); return; }
+  document.getElementById('habitDetailTitle').textContent = h.name;
+  document.getElementById('habitDetailFreq').textContent = h.freq==='daily'?'Every day':h.freq+'× per week';
+  var dot = document.getElementById('habitDetailColorDot');
+  if(dot) dot.style.background = h.color;
+  if(!_habitDetailMonth){
+    var now = new Date();
+    _habitDetailMonth = {year: now.getFullYear(), month: now.getMonth()};
+  }
+  renderMonthStats(h);
+  renderMonthCal(h);
+  renderHeatmap(h);
+  renderBarChart(h);
+}
+
+function habitDetailPrevMonth(){
+  if(!_habitDetailMonth) return;
+  _habitDetailMonth.month--;
+  if(_habitDetailMonth.month < 0){ _habitDetailMonth.month=11; _habitDetailMonth.year--; }
+  var h = (userHabits||[]).find(function(x){ return x.id===viewingHabitId; });
+  if(h){ renderMonthStats(h); renderMonthCal(h); }
+}
+function habitDetailNextMonth(){
+  if(!_habitDetailMonth) return;
+  var now = new Date();
+  if(_habitDetailMonth.year===now.getFullYear()&&_habitDetailMonth.month===now.getMonth()) return;
+  _habitDetailMonth.month++;
+  if(_habitDetailMonth.month > 11){ _habitDetailMonth.month=0; _habitDetailMonth.year++; }
+  var h = (userHabits||[]).find(function(x){ return x.id===viewingHabitId; });
+  if(h){ renderMonthStats(h); renderMonthCal(h); }
+}
+
+function renderMonthStats(h){
+  var el = document.getElementById('habitDetailStats'); if(!el) return;
+  var completions = h.completions||{};
+  var y = _habitDetailMonth.year, mo = _habitDetailMonth.month;
+  var daysInMonth = new Date(y, mo+1, 0).getDate();
+  var now = new Date();
+  var logged=0, totalInt=0, streak=0, maxStreak=0, curStreak=0;
+  for(var day=1;day<=daysInMonth;day++){
+    var dt=new Date(y,mo,day);
+    if(dt>now) break;
+    var ds=dateStr(dt);
+    var val=completions[ds];
+    if(val){ logged++; var lv=val===true?3:(parseInt(val)||1); totalInt+=lv; curStreak++; maxStreak=Math.max(maxStreak,curStreak); }
+    else { curStreak=0; }
+  }
+  var avgInt = logged>0 ? (totalInt/logged).toFixed(1) : '—';
+  var intLabel = avgInt==='—'?'—':avgInt>=2.5?'High':avgInt>=1.5?'Mid':'Low';
+  var MONTH_NAMES=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('habitCalMonthLabel').textContent = MONTH_NAMES[mo]+' '+y;
+  el.innerHTML = [
+    {val:logged, lbl:'Days logged', color:h.color},
+    {val:maxStreak, lbl:'Best streak', color:'var(--green)'},
+    {val:intLabel, lbl:'Avg intensity', color:'var(--orange)'}
+  ].map(function(s){
+    return '<div style="flex:1;background:var(--off);border-radius:14px;padding:12px 14px;border:1px solid var(--card-border)">'
+      +'<div style="font-family:var(--serif);font-size:22px;font-weight:600;color:'+s.color+'">'+s.val+'</div>'
+      +'<div style="font-size:10px;color:var(--mid);margin-top:2px;letter-spacing:.3px">'+s.lbl+'</div>'
+    +'</div>';
+  }).join('');
+}
+
+function renderMonthCal(h){
+  var el = document.getElementById('habitMonthCal'); if(!el) return;
+  var completions = h.completions||{};
+  var y = _habitDetailMonth.year, mo = _habitDetailMonth.month;
+  var daysInMonth = new Date(y, mo+1, 0).getDate();
+  var firstDow = new Date(y, mo, 1).getDay(); // 0=Sun
+  var now = new Date();
+  var todayDs = dateStr(now);
+  var opacities = {'1':0.35,'2':0.65,'3':1,'true':1};
+  var DAY_HDRS = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  var html = DAY_HDRS.map(function(l){ return '<div class="hmc-day-lbl">'+l+'</div>'; }).join('');
+  // Empty slots before month start
+  for(var s=0;s<firstDow;s++) html+='<div class="hmc-cell empty-slot"></div>';
+  for(var d=1;d<=daysInMonth;d++){
+    var dt=new Date(y,mo,d);
+    var ds=dateStr(dt);
+    var isFuture=dt>now;
+    var isToday=ds===todayDs;
+    var val=completions[ds];
+    var intLvl=val===true?3:(parseInt(val)||0);
+    var cls='hmc-cell ';
+    var style='';
+    if(isFuture){ cls+='future'; }
+    else if(intLvl){ cls+='logged'; var op=opacities[String(val)]||1; style='background:'+h.color+';opacity:'+op; }
+    else { cls+='no-data'; }
+    if(isToday) cls+=' today-cal';
+    html+='<div class="'+cls+'" style="'+style+'">'+d+'</div>';
+  }
+  el.innerHTML = html;
+}
+
+function renderHeatmap(h){
+  var el = document.getElementById('habitHeatmap'); if(!el) return;
+  var completions = h.completions||{};
+  var now = new Date();
+  var weeks = 10;
+  var intOpacities = {'1':0.3,'2':0.6,'3':1,'true':1};
+  var html = '';
+  for(var w=weeks-1;w>=0;w--){
+    var colHtml = '<div style="display:flex;flex-direction:column;gap:4px">';
+    for(var d=0;d<7;d++){
+      var daysAgo = w*7+(6-d);
+      var dt = new Date(now); dt.setDate(now.getDate()-daysAgo);
+      var ds = dateStr(dt);
+      var isFuture = dt > now;
+      var val = completions[ds];
+      var bg;
+      if(isFuture){ bg='background:rgba(255,255,255,0.03)'; }
+      else if(val){ var op=intOpacities[String(val)]||1; bg='background:'+h.color+';opacity:'+op; }
+      else { bg='background:var(--gray)'; }
+      colHtml += '<div class="hm-cell" style="'+bg+'"></div>';
+    }
+    colHtml += '</div>';
+    html += colHtml;
+  }
+  el.innerHTML = html;
+  el.style.display = 'grid';
+  el.style.gridTemplateColumns = 'repeat('+weeks+', 1fr)';
+}
+
+function renderBarChart(h){
+  var el = document.getElementById('habitBarChart'); if(!el) return;
+  var completions = h.completions||{};
+  var now = new Date();
+  var weeks = 10;
+  var data = [];
+  var maxVal = 1;
+  for(var w=weeks-1;w>=0;w--){
+    var count=0;
+    for(var d=0;d<7;d++){
+      var daysAgo=w*7+(6-d);
+      var dt=new Date(now); dt.setDate(now.getDate()-daysAgo);
+      if(completions[dateStr(dt)]) count++;
+    }
+    data.push(count);
+    if(count>maxVal) maxVal=count;
+  }
+  el.innerHTML = data.map(function(val,i){
+    var pct = maxVal>0 ? Math.round(val/maxVal*100) : 0;
+    var isThisWeek = i===weeks-1;
+    return '<div class="hbc-bar-wrap">'
+      +'<div style="font-size:9px;color:var(--mid);margin-bottom:3px">'+val+'</div>'
+      +'<div class="hbc-bar-bg">'
+        +'<div class="hbc-bar-fill" style="height:'+pct+'%;background:'+(isThisWeek?h.color:'rgba(108,92,231,0.3)')+'"></div>'
+      +'</div>'
+      +'<div class="hbc-lbl">W'+(i+1)+'</div>'
+    +'</div>';
+  }).join('');
+}
+// ══════════════════════════════════════════
+
+</script>
+</body>
+</html>
