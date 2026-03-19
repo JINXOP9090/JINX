@@ -1454,11 +1454,21 @@ function renderAdminPirateList(){
   var el = document.getElementById('adminPirateList'); if(!el) return;
   var pirates = w.pirates||[];
   if(!pirates.length){ el.innerHTML='<div style="font-size:13px;color:var(--mid);padding:8px 0">No pirates this week</div>'; return; }
+  
+  var allCrews = [];
+  pirates.forEach(function(p){ if(p.crew && !allCrews.includes(p.crew)) allCrews.push(p.crew); });
+  ['Straw Hat Pirates','Whitebeard Pirates','Kuja Pirates','Heart Pirates','Kid Pirates','Revolutionary Army'].forEach(function(c){ if(!allCrews.includes(c)) allCrews.push(c); });
+
   el.innerHTML = pirates.map(function(p){
     var fruitName = p.fruit ? (getFruit(p.fruit)||{name:p.fruit}).name : 'None';
     var fruitOpts = '<option value="">None</option>'+FRUITS.map(function(f){
       return '<option value="'+f.id+'"'+(p.fruit===f.id?' selected':'')+'>'+esc(f.name)+'</option>';
     }).join('');
+    
+    var crewOpts = allCrews.map(function(c){
+      return '<option value="'+esc(c)+'"'+(p.crew===c?' selected':'')+'>'+esc(c)+'</option>';
+    }).join('');
+
     return '<div class="admin-pirate-row" style="flex-direction:column;align-items:stretch;gap:8px">'
       +'<div style="display:flex;align-items:center;gap:10px">'
         +'<div style="flex:1;min-width:0">'
@@ -1472,8 +1482,16 @@ function renderAdminPirateList(){
         +'</div>'
       +'</div>'
       +'<div style="display:flex;align-items:center;gap:8px">'
-        +'<div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--mid);flex-shrink:0">Fruit</div>'
+        +'<div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--mid);flex-shrink:0;width:38px">Fruit</div>'
         +'<select class="admin-select" style="flex:1;font-size:12px;padding:6px 10px" onchange="adminAssignFruit('+p.id+',this.value)">'+fruitOpts+'</select>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:8px">'
+        +'<div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--mid);flex-shrink:0;width:38px">Crew</div>'
+        +'<select class="admin-select" style="flex:1;font-size:12px;padding:6px 10px" onchange="adminChangeCrew('+p.id+',this.value)">'+crewOpts+'</select>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:8px">'
+        +'<div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--mid);flex-shrink:0;width:38px">Bounty</div>'
+        +'<input type="number" class="admin-input" style="flex:1;font-size:12px;padding:6px 10px" value="'+(p.bounty||0)+'" onchange="adminChangeBounty('+p.id+',this.value)">'
       +'</div>'
     +'</div>';
   }).join('');
@@ -1561,6 +1579,28 @@ function adminAssignFruit(id, fruitId){
   var fruitName = fruitId ? (getFruit(fruitId)||{name:fruitId}).name : 'None';
   toast(p.name+' assigned '+fruitName+'.');
   saveState(); renderAll();
+}
+
+function adminChangeCrew(id, newCrew){
+  if(!isAdmin()) return;
+  var w = state.weeks[state.activeWeek];
+  var p = w.pirates.find(function(x){ return x.id===id; });
+  if(!p){ toast('Pirate not found.'); return; }
+  p.crew = newCrew;
+  toast(p.name+' moved to '+newCrew+'.');
+  saveState(); renderAdminPirateList(); renderAll();
+}
+
+function adminChangeBounty(id, newBounty){
+  if(!isAdmin()) return;
+  var b = parseInt(newBounty, 10);
+  if(isNaN(b)) return;
+  var w = state.weeks[state.activeWeek];
+  var p = w.pirates.find(function(x){ return x.id===id; });
+  if(!p){ toast('Pirate not found.'); return; }
+  p.bounty = b;
+  toast(p.name+' bounty set to '+b+'.');
+  saveState(); renderAdminPirateList(); renderAll();
 }
 
 function renderAll(){
