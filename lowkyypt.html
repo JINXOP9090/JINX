@@ -354,9 +354,12 @@ body{font-family:var(--font);background:#050508;color:var(--white);display:flex;
 #chatScreen{overflow:hidden !important;padding-bottom:0 !important}
 .chat-wrap{display:flex;flex-direction:column;flex:1;min-height:0}
 .chat-messages{flex:1;overflow-y:auto;padding:12px 16px 12px;display:flex;flex-direction:column;gap:8px;min-height:0}
-.chat-msg{max-width:78%;padding:10px 14px;border-radius:18px;font-size:14px;line-height:1.5;word-break:break-word}
-.chat-msg.mine{background:var(--accent);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
-.chat-msg.theirs{background:var(--off);color:var(--white);align-self:flex-start;border-bottom-left-radius:4px;border:1px solid var(--card-border)}
+.chat-row { display: flex; gap: 8px; align-items: flex-end; align-self: flex-start; max-width: 85%; }
+.chat-row.mine { flex-direction: row-reverse; align-self: flex-end; }
+.chat-msg-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--off); border: 1px solid var(--card-border); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: var(--mid); flex-shrink: 0; cursor: pointer; user-select: none; overflow: hidden; }
+.chat-msg{flex:1;padding:10px 14px;border-radius:18px;font-size:14px;line-height:1.5;word-break:break-word}
+.chat-msg.mine{background:var(--accent);color:#fff;border-bottom-right-radius:4px}
+.chat-msg.theirs{background:var(--off);color:var(--white);border-bottom-left-radius:4px;border:1px solid var(--card-border)}
 .chat-msg-sender{font-size:10px;letter-spacing:.5px;margin-bottom:3px;opacity:.55}
 .chat-msg.mine .chat-msg-sender{text-align:right;color:rgba(255,255,255,.6)}
 .chat-msg.theirs .chat-msg-sender{color:var(--mid)}
@@ -757,25 +760,20 @@ body{font-family:var(--font);background:#050508;color:var(--white);display:flex;
         </div>
         <div class="admin-row" style="margin-bottom:8px">
           <select class="admin-select" id="adminCpCrew">
-            <option value="Straw Hat Pirates">Straw Hat Pirates</option>
-            <option value="Whitebeard Pirates">Whitebeard Pirates</option>
-            <option value="Kuja Pirates">Kuja Pirates</option>
-            <option value="Heart Pirates">Heart Pirates</option>
-            <option value="Kid Pirates">Kid Pirates</option>
-            <option value="Revolutionary Army">Revolutionary Army</option>
           </select>
           <input class="admin-input" id="adminCpGoal" type="number" min="1" max="200" placeholder="Goal hrs" style="max-width:90px">
         </div>
         <button class="admin-btn" style="width:100%" onclick="adminAddMember()">Add Member</button>
       </div>
 
-      <!-- Add Crew -->
-      <div class="admin-section-lbl">Add Crew</div>
+      <!-- Manage Crews -->
+      <div class="admin-section-lbl">Manage Crews</div>
       <div class="admin-card">
-        <div class="admin-row">
-          <input class="admin-input" id="adminCrewName" type="text" placeholder="Crew name">
+        <div class="admin-row" style="margin-bottom:12px">
+          <input class="admin-input" id="adminCrewName" type="text" placeholder="New crew name">
           <button class="admin-btn" onclick="adminAddCrew()">Add</button>
         </div>
+        <div id="adminCrewList" class="admin-list"></div>
       </div>
 
       <!-- Manage Pirates -->
@@ -892,14 +890,7 @@ body{font-family:var(--font);background:#050508;color:var(--white);display:flex;
           <div class="edit-field"><div class="edit-field-lbl">Real Name</div><input class="edit-input" id="cpReal" type="text" placeholder="Your actual name"></div>
           <div class="edit-field">
             <div class="edit-field-lbl">Crew</div>
-            <select class="crew-select" id="cpCrew">
-              <option value="Straw Hat Pirates">Straw Hat Pirates</option>
-              <option value="Whitebeard Pirates">Whitebeard Pirates</option>
-              <option value="Kuja Pirates">Kuja Pirates</option>
-              <option value="Heart Pirates">Heart Pirates</option>
-              <option value="Kid Pirates">Kid Pirates</option>
-              <option value="Revolutionary Army">Revolutionary Army</option>
-            </select>
+            <select class="crew-select" id="cpCrew"></select>
           </div>
           <div class="edit-field"><div class="edit-field-lbl">Weekly Goal (hours)</div><input class="edit-input" id="cpGoal" type="number" min="1" max="200" placeholder="e.g. 40"></div>
           <div class="edit-field">
@@ -1244,10 +1235,9 @@ function onLoginSuccess(user, isNew){
 
 function doLogout(){
   currentUser = null; currentPirate = null;
-  // Wipe ALL app-related keys from localStorage
-  Object.keys(localStorage).filter(function(k){ return k.startsWith('glt_'); })
+  // Wipe session keys from localStorage, but keep preferences like custom display names
+  ['glt_lastUserKey', 'glt_lastUserDisplay', 'glt_lastUserUid', 'glt_lastUserPhoto', 'glt_lastUserEmail', 'glt_myPirateId', 'glt_pendingRedirect']
     .forEach(function(k){ localStorage.removeItem(k); });
-  localStorage.removeItem('glt_myPirateId');
   if(auth && auth.currentUser) auth.signOut().catch(function(){});
   // Kill Firebase live listener so stale data doesn't re-render
   if(dbRef) dbRef.off();
@@ -1267,12 +1257,19 @@ function matchPirate(){
   if(!currentUser){ currentPirate=null; return; }
   var pirates = state.weeks[state.activeWeek].pirates || [];
   var key = currentUser.key;
+  var uid = currentUser.uid;
   var storedId = localStorage.getItem('glt_myPirateId');
-  // First try to match by stored pirate ID (most reliable)
+  
   if(storedId){
     currentPirate = pirates.find(function(p){ return String(p.id) === storedId; }) || null;
     if(currentPirate) return;
   }
+  
+  if(uid){
+    currentPirate = pirates.find(function(p){ return p.uid === uid; }) || null;
+    if(currentPirate) { localStorage.setItem('glt_myPirateId', String(currentPirate.id)); return; }
+  }
+  
   // Fall back to key-based matching
   currentPirate = pirates.find(function(p){
     return p.real.toLowerCase().replace(/\s/g,'') === key ||
@@ -1280,7 +1277,7 @@ function matchPirate(){
            p.real.toLowerCase().split(' ')[0] === key ||
            p.name.toLowerCase().split(' ')[0] === key;
   }) || null;
-  // If found by key, save the ID for future
+  
   if(currentPirate) localStorage.setItem('glt_myPirateId', String(currentPirate.id));
 }
 
@@ -1433,20 +1430,56 @@ function sidebarGoTo(key){
 }
 
 // ── ADMIN ──
+function getActiveCrews() {
+  var w = state.weeks[state.activeWeek];
+  var crews = [];
+  state.customCrews = state.customCrews || [];
+  state.deletedCrews = state.deletedCrews || [];
+  (w.pirates||[]).forEach(function(p){ 
+    if(p.crew && !crews.includes(p.crew) && !state.deletedCrews.includes(p.crew)) crews.push(p.crew); 
+  });
+  ['Straw Hat Pirates','Whitebeard Pirates','Kuja Pirates','Heart Pirates','Kid Pirates','Revolutionary Army'].forEach(function(c){ 
+    if(!crews.includes(c) && !state.deletedCrews.includes(c)) crews.push(c); 
+  });
+  state.customCrews.forEach(function(c){
+    if(!crews.includes(c) && !state.deletedCrews.includes(c)) crews.push(c);
+  });
+  return crews;
+}
+
+function renderAdminCrewList() {
+  var el = document.getElementById('adminCrewList');
+  if(!el) return;
+  var crews = getActiveCrews();
+  el.innerHTML = crews.map(function(c){
+    return '<div class="admin-pirate-row" style="padding:8px 12px;margin-bottom:4px">'
+      +'<div class="admin-pirate-name" style="flex:1;word-break:break-word">'+esc(c)+'</div>'
+      +'<button class="admin-icon-btn ban" onclick="adminDeleteCrew(\''+esc(c).replace(/'/g,"\\'")+'\')" style="width:auto;padding:0 10px;font-size:11px">Delete</button>'
+      +'</div>';
+  }).join('');
+}
+
+function adminDeleteCrew(name){
+  if(!isAdmin()) return;
+  if(confirm("Delete team '"+name+"'? Players in this team will be teamless.")){
+    state.deletedCrews = state.deletedCrews || [];
+    if(!state.deletedCrews.includes(name)) state.deletedCrews.push(name);
+    state.customCrews = (state.customCrews||[]).filter(function(x){ return x !== name; });
+    state.weeks.forEach(function(w){
+      (w.pirates||[]).forEach(function(p){
+        if(p.crew === name) p.crew = '';
+      });
+    });
+    saveState();
+    renderAll();
+  }
+}
+
 function renderAdmin(){
   if(!isAdmin()){ goTo('home'); return; }
   updateAvatars();
   renderAdminPirateList();
-  // Populate crew dropdowns with current crews
-  var w = state.weeks[state.activeWeek];
-  var crews = [];
-  (w.pirates||[]).forEach(function(p){ if(p.crew && !crews.includes(p.crew)) crews.push(p.crew); });
-  // Add known crews
-  ['Straw Hat Pirates','Whitebeard Pirates','Kuja Pirates','Heart Pirates','Kid Pirates','Revolutionary Army'].forEach(function(c){ if(!crews.includes(c)) crews.push(c); });
-  ['adminCpCrew'].forEach(function(id){
-    var el = document.getElementById(id); if(!el) return;
-    el.innerHTML = crews.map(function(c){ return '<option value="'+esc(c)+'">'+esc(c)+'</option>'; }).join('');
-  });
+  renderAdminCrewList();
 }
 
 function renderAdminPirateList(){
@@ -1455,9 +1488,7 @@ function renderAdminPirateList(){
   var pirates = w.pirates||[];
   if(!pirates.length){ el.innerHTML='<div style="font-size:13px;color:var(--mid);padding:8px 0">No pirates this week</div>'; return; }
   
-  var allCrews = [];
-  pirates.forEach(function(p){ if(p.crew && !allCrews.includes(p.crew)) allCrews.push(p.crew); });
-  ['Straw Hat Pirates','Whitebeard Pirates','Kuja Pirates','Heart Pirates','Kid Pirates','Revolutionary Army'].forEach(function(c){ if(!allCrews.includes(c)) allCrews.push(c); });
+  var allCrews = getActiveCrews();
 
   el.innerHTML = pirates.map(function(p){
     var fruitName = p.fruit ? (getFruit(p.fruit)||{name:p.fruit}).name : 'None';
@@ -1465,7 +1496,7 @@ function renderAdminPirateList(){
       return '<option value="'+f.id+'"'+(p.fruit===f.id?' selected':'')+'>'+esc(f.name)+'</option>';
     }).join('');
     
-    var crewOpts = allCrews.map(function(c){
+    var crewOpts = '<option value="">None</option>'+allCrews.map(function(c){
       return '<option value="'+esc(c)+'"'+(p.crew===c?' selected':'')+'>'+esc(c)+'</option>';
     }).join('');
 
@@ -1473,7 +1504,7 @@ function renderAdminPirateList(){
       +'<div style="display:flex;align-items:center;gap:10px">'
         +'<div style="flex:1;min-width:0">'
           +'<div class="admin-pirate-name">'+esc(p.name)+(p.banned?' <span style="font-size:10px;color:var(--red)">[BANNED]</span>':'')+'</div>'
-          +'<div class="admin-pirate-meta">'+esc(p.real||'—')+' · '+esc(p.crew||'—')+' · '+Math.round((p.logged||0)*10)/10+'h / '+(p.goal||0)+'h</div>'
+          +'<div class="admin-pirate-meta" style="word-break:break-word;white-space:normal;line-height:1.4">'+esc(p.real||'—')+' · '+esc(p.crew||'—')+' · '+Math.round((p.logged||0)*10)/10+'h / '+(p.goal||0)+'h</div>'
         +'</div>'
         +'<div class="admin-actions">'
           +'<button class="admin-icon-btn" title="−1h" onclick="adminDecreaseHrs('+p.id+')" style="font-size:11px;color:var(--orange);border-color:rgba(243,156,18,.4);width:36px">−1h</button>'
@@ -1524,12 +1555,19 @@ function adminAddCrew(){
   if(!isAdmin()) return;
   var name = document.getElementById('adminCrewName').value.trim();
   if(!name){ toast('Enter a crew name.'); return; }
+  
+  state.customCrews = state.customCrews || [];
+  state.deletedCrews = state.deletedCrews || [];
+  if(!state.customCrews.includes(name)) state.customCrews.push(name);
+  if(state.deletedCrews.includes(name)) state.deletedCrews = state.deletedCrews.filter(function(x){ return x !== name; });
+  
   if(!CREW_ICONS[name]){
     CREW_ICONS[name] = name.slice(0,2).toUpperCase();
   }
   document.getElementById('adminCrewName').value='';
-  toast('Crew "'+name+'" added. Assign members to activate it.');
-  renderAdmin();
+  toast('Crew "'+name+'" added.');
+  saveState();
+  renderAll();
 }
 
 function adminDecreaseHrs(id){
@@ -1605,15 +1643,27 @@ function adminChangeBounty(id, newBounty){
 
 function renderAll(){
   renderHome(); renderMembers(); renderProfile(); renderFruits(); renderCrews(); renderWeekTabs(); updateAvatars(); renderTimer();
+
+  var crews = getActiveCrews();
+  ['cpCrew', 'adminCpCrew'].forEach(function(id){
+    var el = document.getElementById(id); if(!el) return;
+    var currentVal = el.value;
+    el.innerHTML = crews.map(function(c){ return '<option value="'+esc(c)+'">'+esc(c)+'</option>'; }).join('');
+    if(currentVal && crews.includes(currentVal)) el.value = currentVal;
+  });
+
   // Fix 12: only render admin list when admin panel is actually open
   var adminScreen = document.getElementById('adminScreen');
   if(isAdmin() && adminScreen && adminScreen.classList.contains('active')){
     renderAdminPirateList();
+    renderAdminCrewList();
   }
 }
 
 function getDisplayName(){
-  var custom = localStorage.getItem('glt_customDisplayName');
+  var custom = '';
+  if(currentUser && currentUser.uid) custom = localStorage.getItem('glt_customDn_' + currentUser.uid);
+  if(!custom) custom = localStorage.getItem('glt_customDisplayName'); // fallback to old generic one
   if(custom && custom.trim()) return custom.trim();
   return currentUser ? (currentUser.displayName||currentUser.key||'?') : '?';
 }
@@ -1898,7 +1948,9 @@ function renderProfile(){
   var adminCard = document.getElementById('profileAdminCard');
   if(adminCard) adminCard.style.display = isAdmin() ? 'block' : 'none';
   // Load custom display name into edit field
-  var customName = localStorage.getItem('glt_customDisplayName')||'';
+  var customName = '';
+  if(currentUser && currentUser.uid) customName = localStorage.getItem('glt_customDn_' + currentUser.uid);
+  if(!customName) customName = localStorage.getItem('glt_customDisplayName') || '';
   var dnField = document.getElementById('editDisplayName');
   if(dnField) dnField.value = customName;
   if(p){
@@ -2270,7 +2322,7 @@ function renderChatMessages(msgs){
   if(!msgs.length){
     if(empty) empty.style.display='flex';
     // Clear any old messages but keep the empty placeholder
-    var old = el.querySelectorAll('.chat-msg,.chat-date-sep');
+    var old = el.querySelectorAll('.chat-row,.chat-date-sep');
     old.forEach(function(n){ n.remove(); });
     return;
   }
@@ -2278,6 +2330,10 @@ function renderChatMessages(msgs){
   var myKey = currentUser ? currentUser.key : null;
   var html = '';
   var lastDate = '';
+  
+  var w = state.weeks[state.activeWeek];
+  var pirates = w ? (w.pirates||[]) : [];
+
   msgs.forEach(function(m){
     var d = new Date(m.ts||0);
     var msgDateStr = d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
@@ -2287,16 +2343,34 @@ function renderChatMessages(msgs){
     }
     var isMine = m.senderKey === myKey;
     var timeStr = d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes();
-    html += '<div class="chat-msg '+(isMine?'mine':'theirs')+'">'
-      +'<div class="chat-msg-sender">'+esc(m.senderName||'?')+'</div>'
-      +esc(m.text)
-      +'<div class="chat-msg-time">'+timeStr+'</div>'
+    
+    var p = pirates.find(function(x){ return x.id === m.senderId; });
+    if(!p){
+      p = pirates.find(function(x){
+        return x.name === m.senderName || (x.real||'').toLowerCase().replace(/\s/g,'') === m.senderKey;
+      });
+    }
+    var photo = m.photoURL || (p ? p.photoURL : '');
+    var pid   = m.senderId || (p ? p.id : null);
+    var init  = (m.senderName || '?').slice(0,2).toUpperCase();
+    var avHtml = photo 
+        ? '<img src="'+esc(photo)+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%" referrerpolicy="no-referrer">' 
+        : esc(init);
+    var avatarEl = '<div class="chat-msg-avatar" '+(pid ? 'onclick="openMemberProfile('+pid+', \'chat\')"' : '')+'>'+avHtml+'</div>';
+
+    html += '<div class="chat-row '+(isMine?'mine':'theirs')+'">'
+      + avatarEl
+      +'<div class="chat-msg '+(isMine?'mine':'theirs')+'">'
+        +'<div class="chat-msg-sender">'+esc(m.senderName||'?')+'</div>'
+        +esc(m.text)
+        +'<div class="chat-msg-time">'+timeStr+'</div>'
+      +'</div>'
     +'</div>';
   });
   // Replace only message nodes, preserve empty div
   var frag = document.createElement('div');
   frag.innerHTML = html;
-  var old2 = el.querySelectorAll('.chat-msg,.chat-date-sep');
+  var old2 = el.querySelectorAll('.chat-row,.chat-date-sep');
   old2.forEach(function(n){ n.remove(); });
   while(frag.firstChild) el.appendChild(frag.firstChild);
   el.scrollTop = el.scrollHeight;
@@ -2311,8 +2385,10 @@ function sendChatMessage(){
   var msg = {
     senderKey:  currentUser.key,
     senderName: getDisplayName(),
-    text: text,
-    ts: Date.now()
+    senderId:   currentPirate ? currentPirate.id : null,
+    photoURL:   currentUser.photoURL || '',
+    text:       text,
+    ts:         Date.now()
   };
   chatRef.push(msg).catch(function(e){ toast('Could not send: '+e.message); });
   input.value = '';
@@ -2400,7 +2476,11 @@ function confirmAdvanceWeek(){
 function saveProfile(){
   // Save custom display name (works even if not linked to pirate)
   var customDn = document.getElementById('editDisplayName') ? document.getElementById('editDisplayName').value.trim() : '';
-  localStorage.setItem('glt_customDisplayName', customDn);
+  if(currentUser && currentUser.uid){
+    localStorage.setItem('glt_customDn_' + currentUser.uid, customDn);
+  } else {
+    localStorage.setItem('glt_customDisplayName', customDn);
+  }
 
   if(!currentPirate){ toast('Display name saved!'); updateAvatars(); return; }
   var w = state.weeks[state.activeWeek];
